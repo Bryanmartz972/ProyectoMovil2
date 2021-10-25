@@ -15,5 +15,6 @@ app.listen(app.get('port'), () => {
 //Rutas
 app.use('/api/',require('./routes/index'));
 app.use('/api/usuario/',require('./routes/usuario'));
+app.use('/api/producto/',require('./routes/productos'))
 //Hola mundo Bryan que pedos
 //HOLA MUNDO
