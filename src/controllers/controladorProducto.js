@@ -6,14 +6,13 @@ exports.listarProducto = async (req, res) => {
 };
 
 exports.GuardarProducto = async(req, res) => {
-    const { idproducto, nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo } = req.body;
-    if (!idproducto || !nombre_producto || !cantidad_producto || !precio_producto || !marca_producto || !idcategorias || !idtallas || !costo)
+    const {  nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo } = req.body;
+    if ( !nombre_producto || !cantidad_producto || !precio_producto || !marca_producto || !idcategorias || !idtallas || !costo)
     {
         res.send("Debe enviar los datos completos");
     }
     else{
         const nuevoProducto = await Producto.create({
-            idproducto: idproducto,
             nombre_producto: nombre_producto,
             cantidad_producto: cantidad_producto,
             precio_producto: precio_producto,
