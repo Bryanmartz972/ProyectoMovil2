@@ -5,13 +5,12 @@ exports.listarTarjeta = async (req, res) => {
     res.json(tarjeta);
 };
 
-exports.GuardarTarjeta = async(req, res) => {
-    const {num_tarjeta, fecha_vencimiento, VIN, tipo_tarjeta, idusuario} = req.body;
-    if (!num_tarjeta || !fecha_vencimiento || !VIN || !tipo_tarjeta || !idusuario)
-    {
+exports.GuardarTarjeta = async (req, res) => {
+    const { num_tarjeta, fecha_vencimiento, VIN, tipo_tarjeta, idusuario } = req.body;
+    if (!num_tarjeta || !fecha_vencimiento || !VIN || !tipo_tarjeta || !idusuario) {
         res.send("Debe enviar los datos completos");
     }
-    else{
+    else {
         const nuevoProducto = await Producto.create({
             num_tarjeta: num_tarjeta,
             fecha_vencimiento: fecha_vencimiento,
@@ -21,7 +20,7 @@ exports.GuardarTarjeta = async(req, res) => {
         }).then((data) => {
             console.log(data);
             res.send("Registro almacenado correctamente");
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log(error);
             res.send("Error al guardar los datos");
         });
@@ -30,95 +29,91 @@ exports.GuardarTarjeta = async(req, res) => {
 
 
 exports.EliminarParamsTarjeta = async (req, res) => {
-    const { idtarjetas } =  req.params;
-    if(!idtarjetas )
-    {
+    const { idtarjetas } = req.params;
+    if (!idtarjetas) {
         res.send("Debe enviar el id de tarjeta ")
     }
-    else{
-         const buscarTarjeta = await Tarjeta.findOne({
-            where:{
-                idtarjetas : idtarjetas ,
-            } 
-         });
-         if(!buscarTarjeta){
-             res.send("La Tarjeta no existe");
-         }
-         else{
-             await Tarjeta.destroy({
-                where:{
-                    idtarjetas :idtarjetas ,
+    else {
+        const buscarTarjeta = await Tarjeta.findOne({
+            where: {
+                idtarjetas: idtarjetas,
+            }
+        });
+        if (!buscarTarjeta) {
+            res.send("La Tarjeta no existe");
+        }
+        else {
+            await Tarjeta.destroy({
+                where: {
+                    idtarjetas: idtarjetas,
                 }
-             }).then((data) => {
-                 console.log(data);
-                 res.send("El registro ha sido eliminado");
-             }).catch((error)=>{
-                 console.log(error);
-                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
-             });
-         }
+            }).then((data) => {
+                console.log(data);
+                res.send("El registro ha sido eliminado");
+            }).catch((error) => {
+                console.log(error);
+                res.send("El registro no fue eleminado,porque hay un error en el servidor")
+            });
+        }
     }
 };
 
 exports.EliminarQueryTarjeta = async (req, res) => {
-    const { idtarjetas  } =  req.query;
-    if(!idtarjetas )
-    {
+    const { idtarjetas } = req.query;
+    if (!idtarjetas) {
         res.send("Debe enviar el id de tarjeta ")
     }
-    else{
-         const buscarTarjeta = await Tarjeta.findOne({
-            where:{
-                idtarjetas : idtarjetas ,
-            } 
-         });
-         if(!buscarTarjeta){
-             res.send("La Tarjeta no existe");
-         }
-         else{
-             await Tarjeta.destroy({
-                where:{
-                    idtarjetas :idtarjetas ,
+    else {
+        const buscarTarjeta = await Tarjeta.findOne({
+            where: {
+                idtarjetas: idtarjetas,
+            }
+        });
+        if (!buscarTarjeta) {
+            res.send("La Tarjeta no existe");
+        }
+        else {
+            await Tarjeta.destroy({
+                where: {
+                    idtarjetas: idtarjetas,
                 }
-             }).then((data) => {
-                 console.log(data);
-                 res.send("El registro ha sido eliminado");
-             }).catch((error)=>{
-                 console.log(error);
-                 res.send("El registro no fue eleminado, porque hay un error en el servidor")
-             });
-         }
+            }).then((data) => {
+                console.log(data);
+                res.send("El registro ha sido eliminado");
+            }).catch((error) => {
+                console.log(error);
+                res.send("El registro no fue eleminado, porque hay un error en el servidor")
+            });
+        }
     }
 };
 
 exports.ActualizarTarjeta = async (req, res) => {
-    const {idtarjetas } = req.query;
-    const {num_tarjeta, fecha_vencimiento, VIN, tipo_tarjeta, idusuario} = req.body;
-    if (!idtarjetas)
-    {
+    const { idtarjetas } = req.query;
+    const { num_tarjeta, fecha_vencimiento, VIN, tipo_tarjeta, idusuario } = req.body;
+    if (!idtarjetas) {
         res.send("Debe enviar el id de tarjeta");
     }
-    else{
+    else {
         var buscarTarjeta = await Tarjeta.findOne({
             where: {
                 idtarjetas: idtarjetas,
             }
         });
-        if (!buscarTarjeta){
+        if (!buscarTarjeta) {
             res.send("La tarjeta no existe");
         }
-        else{
+        else {
 
-            if (!idtarjetas || !num_tarjeta || ! fecha_vencimiento || !VIN || !tipo_tarjeta || !idusuario)
-            {
+            if (!idtarjetas || !num_tarjeta || !fecha_vencimiento || !VIN || !tipo_tarjeta || !idusuario) {
                 res.send("Debe enviar los datos completos");
             }
-            else{
-                buscarTarjeta.num_tarjeta=num_tarjeta;
-                buscarTarjeta.fecha_vencimiento=fecha_vencimiento;
-                buscarTarjeta.VIN=VIN;
-                buscarTarjeta.tipo_tarjeta=tipo_tarjeta;
-                buscarTarjeta.idusuario=idusuario;
+            else {
+                buscarTarjeta.num_tarjeta = num_tarjeta;
+                buscarTarjeta.fecha_vencimiento = fecha_vencimiento;
+                buscarTarjeta.VIN = VIN;
+                buscarTarjeta.tipo_tarjeta = tipo_tarjeta;
+                buscarTarjeta.idusuario = idusuario;
                 await buscarTarjeta.save();
                 console.log(buscarTarjeta);
                 res.send("Registro actualizado");

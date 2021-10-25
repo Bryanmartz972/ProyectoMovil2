@@ -17,5 +17,6 @@ app.use('/api/',require('./routes/index'));
 app.use('/api/usuario/',require('./routes/usuario'));
 app.use('/api/producto/',require('./routes/productos'));
 app.use('/api/tarjeta/',require('./routes/tarjetas'));
+app.use('/api/pago/',require('./routes/pagos'));
 //Hola mundo Bryan que pedos
 //HOLA MUNDO
