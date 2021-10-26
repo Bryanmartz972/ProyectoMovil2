@@ -21,5 +21,6 @@ app.use('/api/pago/',require('./routes/pagos'));
 app.use('/api/producto/',require('./routes/productos'))
 app.use('/api/categorias/',require('./routes/Categorias'))
 app.use('/api/tallas',require('./routes/Tallas'))
-//Hola mundo Bryan que pedos
-//HOLA MUNDO
+app.use('/api/factura/',require('./routes/facturas'));
+app.use('/api/detalles_factura/',require('./routes/detalles_factura'));
+
