@@ -6,14 +6,13 @@ exports.listarTalla = async (req, res) => {
 };
 
 exports.GuardarTalla = async(req, res) => {
-    const { idtallas, descripcion_talla } = req.body;
-    if (!idtallas || !descripcion_talla )
+    const { descripcion_talla } = req.body;
+    if (!descripcion_talla )
     {
         res.send("Debe enviar los datos completos");
     }
     else{
-        const nuevaTalla = await Tallas.create({
-            idtallas: idtallas,
+        var nuevaTalla = await Tallas.create({
             descripcion_talla: descripcion_talla
         
         }).then((data) => {

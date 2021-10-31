@@ -6,14 +6,14 @@ exports.listarCategoria = async (req, res) => {
 };
 
 exports.GuardarCategoria = async(req, res) => {
-    const { idcategorias, descripcion } = req.body;
-    if (!idcategorias || !descripcion )
+    const {descripcion } = req.body;
+    if (!descripcion )
     {
         res.send("Debe enviar los datos completos");
     }
     else{
-        const nuevaCategoria = await Categorias.create({
-            idcategorias: idcategorias,
+        var nuevaCategoria = await Categorias.create({
+      
             descripcion: descripcion
         
         }).then((data) => {
