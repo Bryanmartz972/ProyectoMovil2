@@ -1,4 +1,4 @@
-const ModeloCliente = require('../models/modeloUsuario');
+const ModeloUsuario = require('../models/modeloUsuario');
 const {validationResult} = require('express-validator');
 const moment = require('moment');
 const msj = require('../componentes/mensaje');
@@ -12,44 +12,45 @@ exports.incioSesion = async (req, res, next)=> {
         msj("Los datos ingresados no son validos", 200, validacion.array(), res);
     }
     else{
-        const {usuario, contrasena} = req.body;
-        const BuscarCliente = await ModeloCliente.findOne({
+        const {nombre_usuario, contrasena} = req.body;
+        const Buscarusuario = await ModeloUsuario.findOne({
             where:{
                 [Op.and]:[{
-                    [Op.or]:[
-                        {correo: usuario},
-                        {login: usuario}
+                    [Op.or]:
+                    [
+                        {nombre_usuario: nombre_usuario}
+                        
                     ],
-                    activo: true,
                 }],
             }
         });
-        if(!BuscarCliente)
+        if(!Buscarusuario)
         {
             msj("El cliente no existe o se encuentra inactivo", 200,[], res);
         }
         else
         {
-            if(!BuscarCliente.verificarContrasena(contrasena, BuscarCliente.contrasena))
+            if(!Buscarusuario.verificarContrasena(contrasena, Buscarusuario.contrasena))
             {
                 msj("El cliente no existe o contrasena invalida", 200, [], res);
             }
             else
             {
-                const cli = {
-                    correo: BuscarCliente.correo,
-                    login: BuscarCliente.login,
-                    nombre: BuscarCliente.nombre,
-                    apellido: BuscarCliente.apellido,
-                    telefono: BuscarCliente.telefono,
-                    imagen: BuscarCliente.imagen
+                const usu = {
+                    idusuario: Buscarusuario.idusuario,
+                    nombre: Buscarusuario.nombre,
+                    apellido: Buscarusuario.apellido,
+                    nombre_usuario: Buscarusuario.nombre_usuario,
+                    correo: Buscarusuario.correo,
+                    telefono: Buscarusuario.telefono,
+                    direccion_usuario: Buscarusuario.direccion_usuario
                 };
-                const token = passport.getToken({id: BuscarCliente.id});
+                const token = passport.getToken({idusuario: Buscarusuario.idusuario});
                 const data = {
                     token: token,
-                    cliente: cli
+                    cliente: usu
                 };
-                msj("Bienvenido, " + cli.nombre + " " + cli.apellido, 200, data, res);
+                msj("Bienvenido, " + usu.nombre + " " + usu.apellido, 200, data, res);
             }
         }
     }

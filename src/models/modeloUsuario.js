@@ -8,6 +8,7 @@ const Usuario = db.define(
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
+            
         },
         nombre: {
             type: sequelize.STRING(45),
@@ -41,6 +42,22 @@ const Usuario = db.define(
     {
         tableName: "usuario",
         timestamps: false,
-    }
+        hooks : {
+            beforeCreate(Usuario) {
+              const hash = bcrypt.hashSync(Usuario.contrasena, 10);
+              Usuario.contrasena = hash;
+            },
+            beforeUpdate(Usuario){
+              const hash = bcrypt.hashSync(Usuario.contrasena, 10);
+              Usuario.contrasena = hash;
+            }
+          },  
+    },
+
+   
 );
+Usuario.prototype.verificarContrasena = (con, com)=>{
+    return bcrypt.compareSync(con, com);
+}
+
 module.exports = Usuario;
