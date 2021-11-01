@@ -5,7 +5,7 @@ const controladorAutenticacion= require('../../controllers/autenticacion');
 
 
 router.get('/',controladorAutenticacion.validarAutenticado ,controladorUsuario.listarUsuarios);
-router.post('/',controladorAutenticacion.validarAutenticado,controladorUsuario.Guardar);
+router.post('/',controladorUsuario.Guardar);
 router.delete('/:idusuario',controladorAutenticacion.validarAutenticado,controladorUsuario.EliminarParams);
 router.delete('/',controladorAutenticacion.validarAutenticado,controladorUsuario.EliminarQuery);
 router.put('/',controladorAutenticacion.validarAutenticado,controladorUsuario.ActualizarQuery);

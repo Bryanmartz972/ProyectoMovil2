@@ -1,5 +1,7 @@
 const sequelize = require('sequelize');
 const db = require('../configs/db');
+const bcrypt = require('bcrypt');
+
 const Usuario = db.define(
     "usuario",
     {
@@ -31,7 +33,7 @@ const Usuario = db.define(
             allowNull: false,
         },
         contrasena: {
-            type: sequelize.STRING(45),
+            type: sequelize.STRING(255),
             allowNull: false,
         },
         direccion_usuario: {

@@ -22,4 +22,6 @@ app.use('/api/categorias/',require('./routes/Categorias'));
 app.use('/api/tallas/',require('./routes/Tallas'));
 app.use('/api/factura/',require('./routes/facturas'));
 app.use('/api/detalles_factura/',require('./routes/detalles_factura'));
+app.use('/api/autenticacion', require('./routes/autenticacion'));
+
 

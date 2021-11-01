@@ -4,7 +4,7 @@ const estrategiaJWT = require("passport-jwt").Strategy;
 const extraerJWT = require("passport-jwt").ExtractJwt;
 const jWT = require("jsonwebtoken");
 const moment =require('moment');
-const duracion = moment.duration(50, "m").asSeconds();
+const duracion = moment.duration(500, "m").asSeconds();
 const clave = 'MyClaveSegura';
 exports.getToken = (data) => {
     return jWT.sign(data, clave, { expiresIn: duracion });
@@ -16,11 +16,11 @@ opciones.secretOrKey = clave;
 passport.use( new estrategiaJWT(opciones, async (payload, done) => {
     return await ModeloCliente.findOne({
         where:{
-            id: payload.id, activo: true, 
+            idusuario: payload.idusuario, 
         }
     })
     .then((data) =>{
-        return done(null, data.id);    
+        return done(null, data.idusuario);    
     })
     .catch((error) =>{
         return done(null, false);
