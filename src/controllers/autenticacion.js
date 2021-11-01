@@ -1,6 +1,6 @@
 const ModeloCliente = require('../models/modeloUsuario');
 const {validationResult} = require('express-validator');
-const moment =require('moment');
+const moment = require('moment');
 const msj = require('../componentes/mensaje');
 const passport = require('../configs/passport');
 const { Op } = require("sequelize");
