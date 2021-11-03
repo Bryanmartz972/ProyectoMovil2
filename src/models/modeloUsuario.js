@@ -3,7 +3,7 @@ const db = require('../configs/db');
 const bcrypt = require('bcrypt');
 
 const Usuario = db.define(
-    "usuario",
+    "usuarios",
     {
         idusuario: {
             type: sequelize.INTEGER,
@@ -12,12 +12,8 @@ const Usuario = db.define(
             allowNull: false,
             
         },
-        nombre: {
-            type: sequelize.STRING(45),
-            allowNull: false,
-        },
-        apellido: {
-            type: sequelize.STRING(45),
+        nombre_completo: {
+            type: sequelize.STRING(255),
             allowNull: false,
         },
         nombre_usuario: {
@@ -34,10 +30,10 @@ const Usuario = db.define(
             allowNull: false,
         },
         telefono: {
-            type: sequelize.STRING(45),
+            type: sequelize.STRING(15),
             allowNull: false,
         },
-        contrasena: {
+        contrasena_encriptada: {
             type: sequelize.STRING(255),
             allowNull: false,
             validate:
@@ -49,7 +45,7 @@ const Usuario = db.define(
             },
         },
         direccion_usuario: {
-            type: sequelize.STRING(45),
+            type: sequelize.STRING(255),
             allowNull: false,
         },
     },
@@ -58,12 +54,12 @@ const Usuario = db.define(
         timestamps: false,
         hooks : {
             beforeCreate(Usuario) {
-              const hash = bcrypt.hashSync(Usuario.contrasena, 10);
-              Usuario.contrasena = hash;
+              const hash = bcrypt.hashSync(Usuario.contrasena_encriptada, 10);
+              Usuario.contrasena_encriptada = hash;
             },
             beforeUpdate(Usuario){
-              const hash = bcrypt.hashSync(Usuario.contrasena, 10);
-              Usuario.contrasena = hash;
+              const hash = bcrypt.hashSync(Usuario.contrasena_encriptada, 10);
+              Usuario.contrasena_encriptada = hash;
             }
           },  
     },

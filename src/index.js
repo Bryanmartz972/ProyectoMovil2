@@ -12,15 +12,16 @@ app.listen(app.get('port'), () => {
 });
 app.set('json spaces', 2);
 app.use(passport.initialize());
-//rutas
+
+//Rutas
 app.use('/api/',require('./routes/index'));
-app.use('/api/usuario/',require('./routes/usuario'));
+app.use('/api/usuarios/',require('./routes/usuarios'));
 app.use('/api/productos/',require('./routes/productos'));
 app.use('/api/tarjeta/',require('./routes/tarjetas'));
 app.use('/api/pago/',require('./routes/pagos'));
 app.use('/api/categorias/',require('./routes/Categorias'));
 app.use('/api/tallas/',require('./routes/Tallas'));
-app.use('/api/factura/',require('./routes/facturas'));
+app.use('/api/facturas/',require('./routes/facturas'));
 app.use('/api/detalles_factura/',require('./routes/detalles_factura'));
 app.use('/api/autenticacion', require('./routes/autenticacion'));
 

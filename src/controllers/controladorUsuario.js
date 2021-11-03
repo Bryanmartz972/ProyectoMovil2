@@ -6,19 +6,18 @@ exports.listarUsuarios = async (req, res) => {
 };
 
 exports.Guardar = async(req, res) => {
-    const { nombre, apellido, nombre_usuario, correo, telefono, contrasena, direccion_usuario } = req.body;
-    if (!nombre || !apellido || !nombre_usuario || !correo || !telefono || !contrasena || !direccion_usuario)
+    const { nombre_completo, nombre_usuario, correo, telefono, contrasena_encriptada, direccion_usuario } = req.body;
+    if (!nombre_completo || !nombre_usuario || !correo || !telefono || !contrasena_encriptada || !direccion_usuario)
     {
         res.send("Debe enviar los datos completos");
     }
     else{
         const nuevoUsuario = await Usuario.create({
-            nombre: nombre,
-            apellido: apellido,
+            nombre_completo: nombre_completo,
             nombre_usuario: nombre_usuario,
             correo: correo,
             telefono: telefono,
-            contrasena: contrasena,
+            contrasena_encriptada: contrasena_encriptada,
             direccion_usuario: direccion_usuario
         }).then((data) => {
             console.log(data);
@@ -95,7 +94,7 @@ exports.EliminarQuery = async (req, res) => {
 
 exports.ActualizarQuery = async (req, res) => {
     const {idusuario} = req.query;
-    const { nombre, apellido, nombre_usuario, correo, telefono, contrasena, direccion_usuario }=req.body;
+    const { nombre_completo, nombre_usuario, correo, telefono, contrasena_encriptada, direccion_usuario }=req.body;
 
     if (!idusuario)
     {
@@ -112,17 +111,16 @@ exports.ActualizarQuery = async (req, res) => {
         }
         else{
 
-            if (!nombre || !apellido || !nombre_usuario || !correo || !telefono || !contrasena || !direccion_usuario)
+            if (!nombre_completo || !nombre_usuario || !correo || !telefono || !contrasena_encriptada || !direccion_usuario)
             {
                 res.send("Debe enviar los datos completos");
             }
             else{
-                buscarUsuario.nombre=nombre;
-                buscarUsuario.apellido=apellido;
+                buscarUsuario.nombre_completo=nombre_completo;
                 buscarUsuario.nombre_usuario=nombre_usuario;
                 buscarUsuario.correo=correo;
                 buscarUsuario.telefono=telefono;
-                buscarUsuario.contrasena=contrasena;
+                buscarUsuario.contrasena_encriptada=contrasena_encriptada;
                 buscarUsuario.direccion_usuario=direccion_usuario;
                 await buscarUsuario.save();
                 console.log(buscarUsuario);
