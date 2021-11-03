@@ -1,10 +1,11 @@
 const{Router} = require('express');
 const router = Router();
 const controladorTarjeta = require('../../controllers/controladorTarjeta');
+const controladorAutenticacion= require('../../controllers/autenticacion');
 
-router.get('/',controladorTarjeta.listarTarjeta);
-router.post('/',controladorTarjeta.GuardarTarjeta);
-router.delete('/:id',controladorTarjeta.EliminarParamsTarjeta);
-router.delete('/',controladorTarjeta.EliminarQueryTarjeta);
-router.put('/',controladorTarjeta.ActualizarTarjeta);
+router.get('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.listarTarjeta);
+router.post('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.GuardarTarjeta);
+router.delete('/:id',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarParamsTarjeta);
+router.delete('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarQueryTarjeta);
+router.put('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.ActualizarTarjeta);
 module.exports = router;
