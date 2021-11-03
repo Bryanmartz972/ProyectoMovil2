@@ -22,7 +22,12 @@ const Usuario = db.define(
         },
         nombre_usuario: {
             type: sequelize.STRING(45),
-            allowNull: false,
+            allowNull: false, 
+            unique: 
+            {
+                msg: 'El usuario debe ser unico'
+            },
+            
         },
         correo: {
             type: sequelize.STRING(255),
@@ -35,6 +40,13 @@ const Usuario = db.define(
         contrasena: {
             type: sequelize.STRING(255),
             allowNull: false,
+            validate:
+            {
+                notEmpty:
+                {
+                   msg: 'Ingrese la contrasena'
+                }
+            },
         },
         direccion_usuario: {
             type: sequelize.STRING(45),
