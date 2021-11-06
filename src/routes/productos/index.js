@@ -6,6 +6,6 @@ const controladorAutenticacion= require('../../controllers/autenticacion');
 router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
 router.post('/guardar', controladorAutenticacion.validarAutenticado,controladorProducto.GuardarProducto);
 router.put('/modificar',controladorAutenticacion.validarAutenticado,controladorProducto.ModificarProducto);
-router.delete('/:id',controladorAutenticacion.validarAutenticado, controladorProducto.EliminarProducto);
+router.delete('/:idproductos',controladorAutenticacion.validarAutenticado, controladorProducto.EliminarProducto);
 
 module.exports=router;

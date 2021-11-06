@@ -50,7 +50,7 @@ const Usuario = db.define(
         },
     },
     {
-        tableName: "usuario",
+        tableName: "usuarios",
         timestamps: false,
         hooks : {
             beforeCreate(Usuario) {

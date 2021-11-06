@@ -54,7 +54,7 @@ const Producto = db.define(
                 }
             }
         },
-        idcategoria: {
+        idcategorias: {
             type: sequelize.INTEGER,
             allowNull: false,
             validate: {

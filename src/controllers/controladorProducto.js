@@ -11,11 +11,7 @@ exports.validarAutenticado = passport.validarAutenticado;
 exports.listarProducto = async (req, res) => {
     try
     {
-        const producto = await Producto.findAll({
-             attributes: [
-                 'idproductos', 'nombre_producto', 'cantidad_producto', 'precio_producto', 'marca_producto', 'idcategoria' , 'idtallas' , 'costo'
-                ]
-        });
+        const producto = await Producto.findAll();
         msj("Peticion procesada correctamente", 200, producto, res);
     }
     catch{
@@ -49,7 +45,6 @@ exports.GuardarProducto = async (req, res)=> {
             const buscarProducto = await Producto.findOne({
                 where:{
                     [Op.or]:{
-                        idproductos:idproductos,
                         nombre_producto: nombre_producto
                     }
                 }
@@ -86,46 +81,38 @@ exports.GuardarProducto = async (req, res)=> {
     }
 };
 
-exports.EliminarProducto = async (req, res)=> {
-    const { idproductos } = req.params;
-    var mensajes = {
-        mensaje: "",
-        data: []
-    };
-    if(!idproductos)
-    {
-        mensajes.mensaje = "El id no debe contener valores nulos";
-    }
-    else
-    {
-        const buscarProducto = await Producto.findOne({
-            where: {
-                idproductos: idproductos,
-            }
-        });
-        console.log(buscarProducto);
-        if (!buscarProducto)
-        {
-            mensajes.mensaje = "El id no existe"
-        }
-        else{
-            
-            await Producto.destroy({
-                where:{
-                    idproductos: idproductos,
-                }
-            }).then((result)=>{
-                console.log(result);
-                mensajes.mensaje="Registros eliminados";
-                mensajes.data=result
-            }).catch((error)=>{
-                mensajes.mensaje="Error al actualizar los datos";
-                
-            });
-            //res.send("Empleado eliminado");
-        }    }
-};
 
+
+exports.EliminarProducto = async (req, res) => {
+    const { idproductos  } =  req.params;
+    if(!idproductos )
+    {
+        res.send("Debe enviar el id del producto ")
+    }
+    else{
+         const buscarProductos = await Producto.findOne({
+            where:{
+                idproductos : idproductos ,
+            } 
+         });
+         if(!buscarProductos){
+             res.send("El producto no existe");
+         }
+         else{
+             await Producto.destroy({
+                where:{
+                    idproductos :idproductos ,
+                }
+             }).then((data) => {
+                 console.log(data);
+                 res.send("El registro ha sido eliminado");
+             }).catch((error)=>{
+                 console.log(error);
+                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
+             });
+         }
+    }
+};
 
 exports.ModificarProducto = async (req, res)=> {
     //const { id } = req.query;
