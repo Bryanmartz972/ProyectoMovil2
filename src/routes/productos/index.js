@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const controladorProducto = require('../../controllers/controladorProducto');
 const controladorAutenticacion= require('../../controllers/autenticacion');
-
+const {body, param} = require('express-validator');
 router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
 
 
