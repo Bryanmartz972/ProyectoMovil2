@@ -4,7 +4,22 @@ const controladorTarjeta = require('../../controllers/controladorTarjeta');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 
 router.get('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.ListarTarjeta);
-router.post('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.GuardarTarjeta);
+
+router.post('/',
+body('num_tarjeta').isLength({min:16}).withMessage('La longitud minima de la categoria es de 16 caracteres'),
+body('VIN').isLength({min:3}).withMessage('La longitud minima de la categoria es de 3 caracteres'),
+param('tipo_tarjeta').isEmpty().withMessage('No se permiten campos vacios'),
+param('idusuario').isEmpty().withMessage('No se permiten campos vacios'),
+controladorAutenticacion.validarAutenticado, controladorTarjeta.GuardarTarjeta);
+
 router.delete('/:idtarjetas',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarParamsTarjeta);
-router.put('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.ActualizarTarjeta);
+
+router.put('/',
+param('idtarjetas').isEmpty().withMessage('No se permiten campos vacios')
+.not().isInt().withMessage('El Id debe ser un numero entero'),
+body('num_tarjeta').isLength({min:16}).withMessage('La longitud minima de la categoria es de 16 caracteres'),
+body('VIN').isLength({min:3}).withMessage('La longitud minima de la categoria es de 3 caracteres'),
+param('tipo_tarjeta').isEmpty().withMessage('No se permiten campos vacios'),
+param('idusuario').isEmpty().withMessage('No se permiten campos vacios'),
+controladorAutenticacion.validarAutenticado, controladorTarjeta.ActualizarTarjeta);
 module.exports = router;
