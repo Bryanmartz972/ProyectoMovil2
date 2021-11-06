@@ -1,28 +1,75 @@
-const Categorias = require('../models/modeloCategorias');;
+const Categorias = require('../models/modeloCategorias');
+const {validationResult} = require('express-validator');
+const moment =require('moment');
+const msj = require('../componentes/mensaje');
+const passport = require('../configs/passport');
+const { Op } = require("sequelize");
+const { normalizeUnits } = require('moment');
+const mensaje = require('../componentes/mensaje');
+exports.validarAutenticado = passport.validarAutenticado;
+
 exports.listarCategoria = async (req, res) => {
-    const categorias = await Categorias.findAll();
-    console.log(categorias);
-    res.json(categorias);
+    try
+    {
+        const categorias = await Categorias.findAll();
+        msj("Peticion procesada correctamente", 200, categorias, res);
+    }
+    catch{
+        msj("Ocurrio un error en el servidor", 500, [], res);
+    }
 };
 
-exports.GuardarCategoria = async(req, res) => {
-    const {descripcion } = req.body;
-    if (!descripcion )
+exports.buscarFactura = async(req,res) => {
+    console.log(req.params);
+    const {idcategorias}=req.params;
+    var mensaje ="";
+    const categorias = await Factura.findByPk(idcategorias);
+    console.log(categorias);
+    res.json(categorias);
+}
+exports.GuardarCategoria = async (req, res)=> {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
     {
-        res.send("Debe enviar los datos completos");
+        console.log( req.body + validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
     }
-    else{
-        var nuevaCategoria = await Categorias.create({
-      
-            descripcion: descripcion
-        
-        }).then((data) => {
-            console.log(data);
-            res.send("Registro almacenado correctamente");
-        }).catch((error)=>{
-            console.log(error);
-            res.send("Error al guardar los datos");
-        });
+    else
+    {
+        const {idcategorias,descripcion} = req.body;
+        console.log(req.body);
+        if(idcategorias && descripcion )
+        {
+            const buscarCategoria = await Categorias.findOne({
+                where:{
+                    [Op.or]:{
+                        descripcion: descripcion
+                    }
+                }
+            });
+            console.log(buscarCategoria);
+            if(!buscarCategoria){
+                await Categorias.create({
+                descripcion: descripcion,
+                }).then((data)=>{
+                   msj("Datos procesados correctamente", 200, data, res);
+                }).catch((error)=>{
+                    msj("Datos procesados correctamente", 200, error, res);
+                });
+            }
+            else{
+                const mensaje={
+                    msj:"La categoria ya existe",
+                };
+                msj("Datos procesados correctamente", 200, mensaje, res);
+            }
+
+            
+        }
+        else
+        {
+            msj("Faltan algunos datos necesarios para el procesamiento de la petición", 200, [], res);
+        }
     }
 };
 
@@ -31,16 +78,16 @@ exports.EliminarParamsCategoria = async (req, res) => {
     const { idcategorias } =  req.params;
     if(!idcategorias)
     {
-        res.send("Debe enviar el id del usuario ")
+        res.send("Debe enviar el id de la factura ")
     }
     else{
-         const nuevaCategoria = await Categorias.findOne({
+         const buscarCategoria = await Categorias.findOne({
             where:{
                 idcategorias: idcategorias,
             } 
          });
-         if(!nuevaCategoria){
-             res.send("El producto no existe");
+         if(!buscarCategoria){
+             res.send("La factura no existe");
          }
          else{
              await Categorias.destroy({
@@ -52,73 +99,48 @@ exports.EliminarParamsCategoria = async (req, res) => {
                  res.send("El registro ha sido eliminado");
              }).catch((error)=>{
                  console.log(error);
-                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
+                 res.send("El registro no fue eliminado, porque hay un error en el servidor");
              });
          }
     }
 };
 
-exports.EliminarQueryCategoria = async (req, res) => {
-    const { idcategorias } =  req.query;
-    if(!idcategorias)
+
+exports.ModificarCategoria = async (req, res)=> {
+    //const { id } = req.query;
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
     {
-        res.send("Debe enviar el id del usuario ")
+        console.log(validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
     }
-    else{
-         const nuevaCategoria = await Categorias.findOne({
+    else
+    {
+        const { idcategorias } = req.query;
+        const { descripcion} = req.body;
+        const buscarCategoria =await Categorias.findOne({
             where:{
-                idcategorias: idcategorias,
-            } 
-         });
-         if(!nuevaCategoria){
-             res.send("El usuario no existe");
-         }
-         else{
-             await Categorias.destroy({
-                where:{
-                    idcategorias:idcategorias,
-                }
-             }).then((data) => {
-                 console.log(data);
-                 res.send("El registro ha sido eliminado");
-             }).catch((error)=>{
-                 console.log(error);
-                 res.send("El registro no fue eleminado, porque hay un error en el servidor")
-             });
-         }
-    }
-};
-
-exports.ActualizarCategorias = async (req, res) => {
-    const {idcategorias} = req.query;
-    const {descripcion}=req.body;
-
-    if (!idcategorias)
-    {
-        res.send("Debe enviar el id del usuario");
-    }
-    else{
-        var nuevaCategoria = await Categorias.findOne({
-            where: {
-                idcategorias: idcategorias,
+                idcategorias: idcategorias
             }
         });
-        if (!nuevaCategoria){
-            res.send("El usuario no existe");
+        console.log(buscarCategoria);
+        if(!buscarCategoria){
+            msj("Datos procesados incorrectamente", 200, [], res);
         }
         else{
-
-            if (!idcategorias || !descripcion )
-            {
-                res.send("Debe enviar los datos completos");
-            }
-            else{
-                nuevaCategoria.descripcion=descripcion;
-                
-                await nuevaCategoria.save();
-                console.log(nuevaCategoria);
-                res.send("Registro actualizado");
-            }
+            buscarCategoria.descripcion=descripcion;
+    
+                await buscarCategoria.save().then((data)=>{
+                    console.log(data);
+                    msj("Datos procesados correctamente", 200, data, res);
+                })
+                .catch((error)=>
+                {
+                    console.log(error);
+                    msj("Error al actualizar el registro",200, error, res);
+                });
+            
         }
     }
 };
+
