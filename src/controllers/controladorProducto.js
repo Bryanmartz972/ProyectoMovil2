@@ -5,6 +5,7 @@ const msj = require('../componentes/mensaje');
 const passport = require('../configs/passport');
 const { Op } = require("sequelize");
 const { normalizeUnits } = require('moment');
+const mensaje = require('../componentes/mensaje');
 exports.validarAutenticado = passport.validarAutenticado;
 
 exports.listarProducto = async (req, res) => {
@@ -21,6 +22,15 @@ exports.listarProducto = async (req, res) => {
         msj("Ocurrio un error en el servidor", 500, [], res);
     }
 };
+
+exports.buscarProducto = async(req,res) => {
+    console.log(req.params);
+    const {idproductos}=req.params;
+    var mensaje ="";
+    const producto = await Producto.findByPk(idproductos);
+    console.log(producto);
+    res.json(producto);
+}
 
 
 exports.GuardarProducto = async (req, res)=> {
@@ -79,10 +89,14 @@ exports.GuardarProducto = async (req, res)=> {
 exports.EliminarProducto = async (req, res)=> {
     const { idproductos } = req.params;
     var mensajes = {
-        mensaje: "Datos procesados correctamente",
+        mensaje: "",
         data: []
     };
-    if(idproductos)
+    if(!idproductos)
+    {
+        mensajes.mensaje = "El id no debe contener valores nulos";
+    }
+    else
     {
         const buscarProducto = await Producto.findOne({
             where: {
@@ -90,8 +104,12 @@ exports.EliminarProducto = async (req, res)=> {
             }
         });
         console.log(buscarProducto);
-        if (buscarProducto)
+        if (!buscarProducto)
         {
+            mensajes.mensaje = "El id no existe"
+        }
+        else{
+            
             await Producto.destroy({
                 where:{
                     idproductos: idproductos,
@@ -100,57 +118,14 @@ exports.EliminarProducto = async (req, res)=> {
                 console.log(result);
                 mensajes.mensaje="Registros eliminados";
                 mensajes.data=result
-                res.status(200).json(mensajes);
             }).catch((error)=>{
                 mensajes.mensaje="Error al actualizar los datos";
-                res.status(200).json(mensajes);
+                
             });
             //res.send("Empleado eliminado");
-        }
-        else
-        {
-            mensajes.mensaje="No existe el id de producto no existe";
-            res.status(200).json(mensajes);
-        }
-
-    }
-    else
-    {
-        mensajes.mensaje="Faltan algunos datos necesarios para el procesamiento de la petición"
-        res.status(200).json(mensajes);
-    }
+        }    }
 };
 
-
-exports.Modificar = async (req, res)=> {
-    //const { id } = req.query;
-    const validacion=validationResult(req);
-    if (!validacion.isEmpty())
-    {
-        console.log(validacion.array());
-        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
-    }
-    else
-    {
-        const { id } = req.query;
-        const { nombre, apellido, telefono} = req.body;
-        const BuscarCliente =await ModeloCliente.findOne({
-            where:{
-                id: id
-            }
-        });
-        console.log(BuscarCliente);
-        if(!BuscarCliente){
-            msj("Datos procesados correctamente", 200, [], res);
-        }
-        else{
-            BuscarCliente.nombre=nombre;
-            BuscarCliente.apellido=apellido;
-            BuscarCliente.telefono=telefono;
-            msj("Datos procesados correctamente", 200, mensaje, res);
-        }
-    }
-};
 
 exports.ModificarProducto = async (req, res)=> {
     //const { id } = req.query;
@@ -171,7 +146,7 @@ exports.ModificarProducto = async (req, res)=> {
         });
         console.log(buscarProducto);
         if(!buscarProducto){
-            msj("Datos procesados correctamente", 200, [], res);
+            msj("Datos procesados incorrectamente", 200, [], res);
         }
         else{
                 buscarProducto.nombre_producto=nombre_producto;
@@ -181,8 +156,16 @@ exports.ModificarProducto = async (req, res)=> {
                 buscarProducto.idcategorias=idcategorias;
                 buscarProducto.idtallas=idtallas;
                 buscarProducto.costo=costo;
-            msj("Datos procesados correctamente", 200, mensaje, res);
+                await buscarProducto.save().then((data)=>{
+                    console.log(data);
+                    msj("Datos procesados correctamente", 200, data, res);
+                })
+                .catch((error)=>
+                {
+                    console.log(error);
+                    msj("Error al actualizar el registro",200, error, res);
+                });
+            
         }
     }
 };
-
