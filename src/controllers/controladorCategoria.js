@@ -37,9 +37,9 @@ exports.GuardarCategoria = async (req, res)=> {
     }
     else
     {
-        const {idcategorias,descripcion} = req.body;
+        const {descripcion} = req.body;
         console.log(req.body);
-        if(idcategorias && descripcion )
+        if(descripcion)
         {
             const buscarCategoria = await Categorias.findOne({
                 where:{
@@ -64,8 +64,6 @@ exports.GuardarCategoria = async (req, res)=> {
                 };
                 msj("Datos procesados correctamente", 200, mensaje, res);
             }
-
-            
         }
         else
         {
