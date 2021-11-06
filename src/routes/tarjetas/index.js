@@ -3,9 +3,8 @@ const router = Router();
 const controladorTarjeta = require('../../controllers/controladorTarjeta');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 
-router.get('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.listarTarjeta);
+router.get('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.ListarTarjeta);
 router.post('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.GuardarTarjeta);
-router.delete('/:id',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarParamsTarjeta);
-router.delete('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarQueryTarjeta);
+router.delete('/:idtarjetas',controladorAutenticacion.validarAutenticado, controladorTarjeta.EliminarParamsTarjeta);
 router.put('/',controladorAutenticacion.validarAutenticado, controladorTarjeta.ActualizarTarjeta);
 module.exports = router;
