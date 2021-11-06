@@ -5,7 +5,6 @@ const controladorAutenticacion= require('../../controllers/autenticacion');
 
 router.get('/',controladorAutenticacion.validarAutenticado, controladorCategoria.listarCategoria);
 router.post('/',controladorAutenticacion.validarAutenticado, controladorCategoria.GuardarCategoria);
-router.delete('/:id',controladorAutenticacion.validarAutenticado, controladorCategoria.EliminarParamsCategoria);
-router.delete('/',controladorAutenticacion.validarAutenticado, controladorCategoria.EliminarQueryCategoria);
-router.put('/',controladorAutenticacion.validarAutenticado, controladorCategoria.ActualizarCategorias);
+router.delete('/:idcategorias',controladorAutenticacion.validarAutenticado, controladorCategoria.EliminarParamsCategoria);
+router.put('/',controladorAutenticacion.validarAutenticado, controladorCategoria.ModificarCategoria);
 module.exports = router;

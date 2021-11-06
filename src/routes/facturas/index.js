@@ -6,6 +6,5 @@ const controladorAutenticacion= require('../../controllers/autenticacion');
 router.get('/',controladorAutenticacion.validarAutenticado, controladorFactura.ListarFactura);
 router.post('/',controladorAutenticacion.validarAutenticado, controladorFactura.GuardarFactura);
 router.delete('/:idfacturas',controladorAutenticacion.validarAutenticado, controladorFactura.EliminarParamsFactura);
-router.delete('/',controladorAutenticacion.validarAutenticado, controladorFactura.EliminarQueryFactura);
-router.put('/',controladorAutenticacion.validarAutenticado, controladorFactura.ActualizarFactura);
+router.put('/',controladorAutenticacion.validarAutenticado, controladorFactura.ModificarFactura);
 module.exports = router;

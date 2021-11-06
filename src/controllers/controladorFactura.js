@@ -110,7 +110,7 @@ exports.EliminarParamsFactura = async (req, res) => {
     }
 };
 
-exports.ModificarProducto = async (req, res)=> {
+exports.ModificarFactura = async (req, res)=> {
     //const { id } = req.query;
     const validacion=validationResult(req);
     if (!validacion.isEmpty())

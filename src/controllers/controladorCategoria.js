@@ -19,14 +19,15 @@ exports.listarCategoria = async (req, res) => {
     }
 };
 
-exports.buscarFactura = async(req,res) => {
+exports.buscarCategoria = async(req,res) => {
     console.log(req.params);
     const {idcategorias}=req.params;
     var mensaje ="";
-    const categorias = await Factura.findByPk(idcategorias);
+    const categorias = await Categorias.findByPk(idcategorias);
     console.log(categorias);
     res.json(categorias);
 }
+
 exports.GuardarCategoria = async (req, res)=> {
     const validacion=validationResult(req);
     if (!validacion.isEmpty())
