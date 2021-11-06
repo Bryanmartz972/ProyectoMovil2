@@ -8,7 +8,7 @@ const { normalizeUnits } = require('moment');
 const mensaje = require('../componentes/mensaje');
 exports.validarAutenticado = passport.validarAutenticado;
 
-exports.listarCategoria = async (req, res) => {
+exports.ListarCategoria = async (req, res) => {
     try
     {
         const categorias = await Categorias.findAll();
