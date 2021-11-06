@@ -12,7 +12,7 @@ exports.incioSesion = async (req, res, next)=> {
         msj("Los datos ingresados no son validos", 200, validacion.array(), res);
     }
     else{
-        const {nombre_usuario, contrasena} = req.body;
+        const {nombre_usuario, contrasena_encritada} = req.body;
         const Buscarusuario = await ModeloUsuario.findOne({
             where:{
                 [Op.and]:[{
@@ -30,7 +30,7 @@ exports.incioSesion = async (req, res, next)=> {
         }
         else
         {
-            if(!Buscarusuario.verificarContrasena(contrasena, Buscarusuario.contrasena))
+            if(!Buscarusuario.verificarContrasena(contrasena_encritada, Buscarusuario.contrasena_encritada))
             {
                 msj("El cliente no existe o contrasena invalida", 200, [], res);
             }
@@ -38,8 +38,7 @@ exports.incioSesion = async (req, res, next)=> {
             {
                 const usu = {
                     idusuario: Buscarusuario.idusuario,
-                    nombre: Buscarusuario.nombre,
-                    apellido: Buscarusuario.apellido,
+                    nombre_completo: Buscarusuario.nombre_completo,
                     nombre_usuario: Buscarusuario.nombre_usuario,
                     correo: Buscarusuario.correo,
                     telefono: Buscarusuario.telefono,
@@ -50,7 +49,7 @@ exports.incioSesion = async (req, res, next)=> {
                     token: token,
                     cliente: usu
                 };
-                msj("Bienvenido, " + usu.nombre + " " + usu.apellido, 200, data, res);
+                msj("Bienvenido, " + nombre_completo, 200, data, res);
             }
         }
     }
