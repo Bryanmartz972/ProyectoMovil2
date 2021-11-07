@@ -3,13 +3,13 @@ const db = require('../configs/db');
 const Tarjeta = db.define(
     "tarjetas",
     {
-        idtarejtas: {
+        idtarjetas: {
             type: sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
         },
-        num_tarjetas: {
+        num_tarjeta: {
             type: sequelize.STRING(45),
             allowNull: false,
         },
