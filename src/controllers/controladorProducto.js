@@ -62,7 +62,7 @@ exports.GuardarProducto = async (req, res)=> {
                 }).then((data)=>{
                    msj("Datos procesados correctamente", 200, data, res);
                 }).catch((error)=>{
-                    msj("Datos procesados correctamente", 200, error, res);
+                    msj("Datos procesados incorrectamente", 200, error, res);
                 });
             }
             else{
@@ -134,7 +134,7 @@ exports.ModificarProducto = async (req, res)=> {
         console.log(buscarProducto);
         if(!buscarProducto){
             msj("Datos procesados incorrectamente", 200, [], res);
-        }
+        } 
         else{
                 buscarProducto.nombre_producto=nombre_producto;
                 buscarProducto.cantidad_producto=cantidad_producto;
