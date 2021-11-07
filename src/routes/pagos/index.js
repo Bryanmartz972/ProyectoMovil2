@@ -3,9 +3,8 @@ const router = Router();
 const controladorPago = require('../../controllers/controladorPago');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 
-router.get('/',controladorAutenticacion.validarAutenticado, controladorPago.listarPago);
-router.post('/',controladorAutenticacion.validarAutenticado, controladorPago.GuardarPago);
-router.delete('/:id',controladorAutenticacion.validarAutenticado, controladorPago.EliminarParamsPago);
-router.delete('/',controladorAutenticacion.validarAutenticado, controladorPago.EliminarQueryPago);
-router.put('/', controladorAutenticacion.validarAutenticado, controladorPago.ActualizarPago);
+router.get('/listar',controladorAutenticacion.validarAutenticado, controladorPago.listarPago);
+router.post('/guardar',controladorAutenticacion.validarAutenticado, controladorPago.GuardarPago);
+router.delete('/:idpagos',controladorAutenticacion.validarAutenticado, controladorPago.EliminarPago);
+router.put('/modificar', controladorAutenticacion.validarAutenticado, controladorPago.ModificarPago);
 module.exports = router;
