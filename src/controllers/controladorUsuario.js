@@ -30,7 +30,7 @@ exports.Guardar = async(req, res) => {
 };
 
 
-exports.EliminarParams = async (req, res) => {
+exports.EliminarParamsUsuario = async (req, res) => {
     const { idusuario } =  req.params;
     if(!idusuario)
     {
@@ -56,37 +56,6 @@ exports.EliminarParams = async (req, res) => {
              }).catch((error)=>{
                  console.log(error);
                  res.send("El registro no fue eleminado,porque hay un error en el servidor")
-             });
-         }
-    }
-};
-
-exports.EliminarQuery = async (req, res) => {
-    const { idusuario } =  req.query;
-    if(!idusuario)
-    {
-        res.send("Debe enviar el id del usuario ")
-    }
-    else{
-         const buscarUsuario = await Usuario.findOne({
-            where:{
-                idusuario: idusuario,
-            } 
-         });
-         if(!buscarUsuario){
-             res.send("El usuario no existe");
-         }
-         else{
-             await Usuario.destroy({
-                where:{
-                    idusuario:idusuario,
-                }
-             }).then((data) => {
-                 console.log(data);
-                 res.send("El registro ha sido eliminado");
-             }).catch((error)=>{
-                 console.log(error);
-                 res.send("El registro no fue eleminado, porque hay un error en el servidor")
              });
          }
     }
