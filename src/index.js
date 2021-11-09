@@ -17,7 +17,7 @@ app.use(passport.initialize());
 app.use('/api/',require('./routes/index'));
 app.use('/api/usuarios/',require('./routes/usuarios'));
 app.use('/api/productos/',require('./routes/productos'));
-app.use('/api/tarjeta/',require('./routes/tarjetas'));
+app.use('/api/tarjetas/',require('./routes/tarjetas'));
 app.use('/api/pagos/',require('./routes/pagos'));
 app.use('/api/categorias/',require('./routes/Categorias'));
 app.use('/api/tallas/',require('./routes/Tallas'));

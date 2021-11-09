@@ -78,7 +78,7 @@ exports.GuardarTarjeta = async (req, res)=> {
 
 exports.EliminarParamsTarjeta = async (req, res) => {
     const { idtarjetas } =  req.params;
-    if(!idfaidtarjetascturas)
+    if(!idtarjetas)
     {
         res.send("Debe enviar el id de la tarjeta ")
     }
@@ -119,7 +119,7 @@ exports.ActualizarTarjeta = async (req, res)=> {
     {
         const { idtarjetas } = req.query;
         const { num_tarjeta, fecha_vencimiento, VIN, tipo_tarjeta, idusuario} = req.body;
-        const buscarFactura =await Factura.findOne({
+        const buscarTarjeta =await Tarjeta.findOne({
             where:{
                 idtarjetas: idtarjetas
             }

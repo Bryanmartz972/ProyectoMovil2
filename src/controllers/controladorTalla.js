@@ -11,7 +11,7 @@ exports.validarAutenticado = passport.validarAutenticado;
 exports.ListarTalla = async (req, res) => {
     try
     {
-        const tall = await Talla.findAll();
+        const talla = await Talla.findAll();
         msj("Peticion procesada correctamente", 200, talla, res);
     }
     catch{
@@ -83,7 +83,7 @@ exports.EliminarParamsTalla = async (req, res) => {
     else{
          const buscarTalla = await Talla.findOne({
             where:{
-                descripcion_talla: descripcion_talla,
+                idtallas: idtallas,
             } 
          });
          if(!buscarTalla){
