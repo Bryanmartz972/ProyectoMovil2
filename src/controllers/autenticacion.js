@@ -18,8 +18,7 @@ exports.incioSesion = async (req, res, next)=> {
                 [Op.and]:[{
                     [Op.or]:
                     [
-                        {nombre_usuario: nombre_usuario}
-                        
+                        {nombre_usuario: nombre_usuario}                        
                     ],
                 }],
             }

@@ -19,6 +19,11 @@ exports.listarProducto = async (req, res) => {
     }
 };
 
+exports.listarProducto2 = async (req, res) => {
+    const producto = await Producto.findAll();
+    res.json(producto)
+};
+
 exports.buscarProducto = async(req,res) => {
     console.log(req.params);
     const {idproductos}=req.params;

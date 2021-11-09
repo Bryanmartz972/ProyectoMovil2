@@ -1,4 +1,5 @@
 const Usuario = require('../models/modeloUsuario');
+
 exports.listarUsuarios = async (req, res) => {
     const { nombre_usuario } =  req.query;
     if(!nombre_usuario)

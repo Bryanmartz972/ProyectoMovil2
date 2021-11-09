@@ -3,8 +3,9 @@ const router = Router();
 const controladorProducto = require('../../controllers/controladorProducto');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 const {body, param} = require('express-validator');
-router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
 
+router.get('/listar2', controladorProducto.listarProducto2);
+router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
 
 router.post('/guardar',
 body('nombre_producto').isLength({min:3}).withMessage('La longitud minima de la categoria es de 3 caracteres'),
@@ -25,3 +26,4 @@ controladorAutenticacion.validarAutenticado,controladorProducto.ModificarProduct
 router.delete('/:idproductos',controladorAutenticacion.validarAutenticado, controladorProducto.EliminarProducto);
 
 module.exports=router;
+
