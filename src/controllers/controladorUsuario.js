@@ -1,8 +1,24 @@
 const Usuario = require('../models/modeloUsuario');
 exports.listarUsuarios = async (req, res) => {
-    const usu = await Usuario.findAll();
-    console.log(usu);
-    res.json(usu);
+    const { nombre_usuario } =  req.query;
+    if(!nombre_usuario)
+    {
+        res.send("Debe enviar el nombre de usuario ")
+    }else{
+    const buscarUsuario = await Usuario.findOne({
+        where: {
+            nombre_usuario: nombre_usuario
+        }
+    });
+    
+    if (!buscarUsuario){
+        res.send("El usuario no existe");
+    }else{
+        console.log(buscarUsuario);
+        res.json(buscarUsuario);
+    }
+    }
+    
 };
 
 exports.Guardar = async(req, res) => {
