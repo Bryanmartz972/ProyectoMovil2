@@ -64,16 +64,7 @@ const Producto = db.define(
                 }
             },
         },
-        idtallas: {
-            type: sequelize.INTEGER,
-            allowNull: false,
-            validate: {
-                is:{
-                    args: [/^[0-9]+$/],
-                    msg: "ID de tallas invalido."
-                }
-            },
-        },
+
         costo: {
             type: sequelize.DOUBLE,
             allowNull: false,
@@ -83,6 +74,11 @@ const Producto = db.define(
                     msg: "ingrese costo"
                 }
             },
+        },
+
+        imagen_producto: {
+            type: sequelize.BLOB,
+            allowNull: true,
         },
     },
     {

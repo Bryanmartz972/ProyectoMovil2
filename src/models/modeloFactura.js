@@ -17,10 +17,6 @@ const Factura = db.define(
             type: sequelize.INTEGER,
             allowNull: false,
         },
-        idpagos: {
-            type: sequelize.INTEGER,
-            allowNull: false,
-        },
     },
     {
         tableName: "facturas",

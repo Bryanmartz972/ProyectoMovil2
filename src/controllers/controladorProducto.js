@@ -43,9 +43,9 @@ exports.GuardarProducto = async (req, res)=> {
     }
     else
     {
-        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo} = req.body;
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo, imagen_producto} = req.body;
         console.log(req.body);
-        if(nombre_producto && cantidad_producto && precio_producto && marca_producto && idcategorias && idtallas && costo)
+        if(nombre_producto && cantidad_producto && precio_producto && marca_producto && idcategorias && costo && imagen_producto)
         {
             const buscarProducto = await Producto.findOne({
                 where:{
@@ -62,8 +62,8 @@ exports.GuardarProducto = async (req, res)=> {
                     precio_producto: precio_producto,
                     marca_producto: marca_producto,
                     idcategorias: idcategorias,
-                    idtallas: idtallas,
                     costo: costo,
+                    imagen_producto: imagen_producto,
                 }).then((data)=>{
                    msj("Datos procesados correctamente", 200, data, res);
                 }).catch((error)=>{
@@ -130,7 +130,7 @@ exports.ModificarProducto = async (req, res)=> {
     else
     {
         const { idproductos } = req.query;
-        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo} = req.body;
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo, imagen_producto} = req.body;
         const buscarProducto =await Producto.findOne({
             where:{
                 idproductos: idproductos
@@ -146,8 +146,8 @@ exports.ModificarProducto = async (req, res)=> {
                 buscarProducto.precio_producto=precio_producto;
                 buscarProducto.marca_producto=marca_producto;
                 buscarProducto.idcategorias=idcategorias;
-                buscarProducto.idtallas=idtallas;
                 buscarProducto.costo=costo;
+                buscarProducto.imagen_producto=imagen_producto;
                 await buscarProducto.save().then((data)=>{
                     console.log(data);
                     msj("Datos procesados correctamente", 200, data, res);

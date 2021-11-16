@@ -37,9 +37,9 @@ exports.GuardarFactura = async (req, res)=> {
     }
     else
     {
-        const {fecha_factura, idusuario, idpagos} = req.body;
+        const {fecha_factura, idusuario} = req.body;
         console.log(req.body);
-        if(fecha_factura && idusuario && idpagos )
+        if(fecha_factura && idusuario )
         {
             const buscarFactura = await Factura.findOne({
                 where:{
@@ -53,7 +53,6 @@ exports.GuardarFactura = async (req, res)=> {
                 await Factura.create({
                 fecha_factura: fecha_factura,
                 idusuario: idusuario,
-                idpagos: idpagos,
                 }).then((data)=>{
                    msj("Datos procesados correctamente", 200, data, res);
                 }).catch((error)=>{
@@ -121,7 +120,7 @@ exports.ModificarFactura = async (req, res)=> {
     else
     {
         const { idfacturas } = req.query;
-        const { fecha_factura, idusuario, idpagos} = req.body;
+        const { fecha_factura, idusuario} = req.body;
         const buscarFactura =await Factura.findOne({
             where:{
                 idfacturas: idfacturas
@@ -134,7 +133,6 @@ exports.ModificarFactura = async (req, res)=> {
         else{
             buscarFactura.fecha_factura=fecha_factura;
             buscarFactura.idusuario=idusuario;
-            buscarFactura.idpagos=idpagos;
     
                 await buscarFactura.save().then((data)=>{
                     console.log(data);
