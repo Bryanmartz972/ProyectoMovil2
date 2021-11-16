@@ -1,56 +1,107 @@
-const Producto = require('../models/modeloProducto');;
+const Producto = require('../models/modeloProducto');
+const {validationResult} = require('express-validator');
+const moment =require('moment');
+const msj = require('../componentes/mensaje');
+const passport = require('../configs/passport');
+const { Op } = require("sequelize");
+const { normalizeUnits } = require('moment');
+const mensaje = require('../componentes/mensaje');
+exports.validarAutenticado = passport.validarAutenticado;
+
 exports.listarProducto = async (req, res) => {
-    const producto = await Producto.findAll();
+    try
+    {
+        const producto = await Producto.findAll();
+        msj("Peticion procesada correctamente", 200, producto, res);
+    }
+    catch{
+        msj("Ocurrio un error en el servidor", 500, [], res);
+    }
+};
+
+exports.buscarProducto = async(req,res) => {
+    console.log(req.params);
+    const {idproductos}=req.params;
+    var mensaje ="";
+    const producto = await Producto.findByPk(idproductos);
     console.log(producto);
     res.json(producto);
+}
+
+
+exports.GuardarProducto = async (req, res)=> {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
+    {
+        console.log( req.body + validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
+    }
+    else
+    {
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo} = req.body;
+        console.log(req.body);
+        if(nombre_producto && cantidad_producto && precio_producto && marca_producto && idcategorias && idtallas && costo)
+        {
+            const buscarProducto = await Producto.findOne({
+                where:{
+                    [Op.or]:{
+                        nombre_producto: nombre_producto
+                    }
+                }
+            });
+            console.log(buscarProducto);
+            if(!buscarProducto){
+                await Producto.create({
+                    nombre_producto: nombre_producto,
+                    cantidad_producto: cantidad_producto,
+                    precio_producto: precio_producto,
+                    marca_producto: marca_producto,
+                    idcategorias: idcategorias,
+                    idtallas: idtallas,
+                    costo: costo,
+                }).then((data)=>{
+                   msj("Datos procesados correctamente", 200, data, res);
+                }).catch((error)=>{
+                    msj("Datos procesados incorrectamente", 200, error, res);
+                });
+            }
+            else{
+                const mensaje={
+                    msj:"El producto ya existe",
+                };
+                msj("Datos procesados correctamente", 200, mensaje, res);
+            }
+
+            
+        }
+        else
+        {
+            msj("Faltan algunos datos necesarios para el procesamiento de la petición", 200, [], res);
+        }
+    }
 };
 
-exports.GuardarProducto = async(req, res) => {
-    const { idproducto, nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo } = req.body;
-    if (!idproducto || !nombre_producto || !cantidad_producto || !precio_producto || !marca_producto || !idcategorias || !idtallas || !costo)
-    {
-        res.send("Debe enviar los datos completos");
-    }
-    else{
-        const nuevoProducto = await Producto.create({
-            idproducto: idproducto,
-            nombre_producto: nombre_producto,
-            cantidad_producto: cantidad_producto,
-            precio_producto: precio_producto,
-            marca_producto: marca_producto,
-            idcategorias: idcategorias,
-            idtallas: idtallas,
-            costo: costo
-        }).then((data) => {
-            console.log(data);
-            res.send("Registro almacenado correctamente");
-        }).catch((error)=>{
-            console.log(error);
-            res.send("Error al guardar los datos");
-        });
-    }
-};
 
 
-exports.EliminarParamsProducto = async (req, res) => {
-    const { idproducto } =  req.params;
-    if(!idproducto)
+exports.EliminarProducto = async (req, res) => {
+    const { idproductos  } =  req.params;
+    if(!idproductos )
     {
-        res.send("Debe enviar el id del usuario ")
+        res.send("Debe enviar el id del producto ")
     }
     else{
-         const buscarProducto = await Producto.findOne({
+         const buscarProductos = await Producto.findOne({
             where:{
-                idproducto: idproducto,
+                idproductos : idproductos ,
             } 
          });
-         if(!buscarProducto){
+         if(!buscarProductos){
              res.send("El producto no existe");
          }
          else{
              await Producto.destroy({
                 where:{
-                    idproducto:idproducto,
+                    idproductos :idproductos ,
                 }
              }).then((data) => {
                  console.log(data);
@@ -63,61 +114,28 @@ exports.EliminarParamsProducto = async (req, res) => {
     }
 };
 
-exports.EliminarQueryProducto = async (req, res) => {
-    const { idproducto } =  req.query;
-    if(!idproducto)
+exports.ModificarProducto = async (req, res)=> {
+    //const { id } = req.query;
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
     {
-        res.send("Debe enviar el id del usuario ")
+        console.log(validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
     }
-    else{
-         const buscarProducto = await Producto.findOne({
+    else
+    {
+        const { idproductos } = req.query;
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo} = req.body;
+        const buscarProducto =await Producto.findOne({
             where:{
-                idproducto: idproducto,
-            } 
-         });
-         if(!buscarProducto){
-             res.send("El usuario no existe");
-         }
-         else{
-             await Producto.destroy({
-                where:{
-                    idproducto:idproducto,
-                }
-             }).then((data) => {
-                 console.log(data);
-                 res.send("El registro ha sido eliminado");
-             }).catch((error)=>{
-                 console.log(error);
-                 res.send("El registro no fue eleminado, porque hay un error en el servidor")
-             });
-         }
-    }
-};
-
-exports.ActualizarProducto = async (req, res) => {
-    const {idproducto} = req.query;
-    const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, idtallas, costo  }=req.body;
-
-    if (!idproducto)
-    {
-        res.send("Debe enviar el id del usuario");
-    }
-    else{
-        var buscarProducto = await Producto.findOne({
-            where: {
-                idusuario: idusuario,
+                idproductos: idproductos
             }
         });
-        if (!buscarProducto){
-            res.send("El usuario no existe");
-        }
+        console.log(buscarProducto);
+        if(!buscarProducto){
+            msj("Datos procesados incorrectamente", 200, [], res);
+        } 
         else{
-
-            if (!idproducto || !nombre_producto || !cantidad_producto || !precio_producto || !marca_producto || !idcategorias || !idtallas || !costo)
-            {
-                res.send("Debe enviar los datos completos");
-            }
-            else{
                 buscarProducto.nombre_producto=nombre_producto;
                 buscarProducto.cantidad_producto=cantidad_producto;
                 buscarProducto.precio_producto=precio_producto;
@@ -125,10 +143,16 @@ exports.ActualizarProducto = async (req, res) => {
                 buscarProducto.idcategorias=idcategorias;
                 buscarProducto.idtallas=idtallas;
                 buscarProducto.costo=costo;
-                await buscarProducto.save();
-                console.log(buscarProducto);
-                res.send("Registro actualizado");
-            }
+                await buscarProducto.save().then((data)=>{
+                    console.log(data);
+                    msj("Datos procesados correctamente", 200, data, res);
+                })
+                .catch((error)=>
+                {
+                    console.log(error);
+                    msj("Error al actualizar el registro",200, error, res);
+                });
+            
         }
     }
 };

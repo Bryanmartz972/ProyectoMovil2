@@ -1,0 +1,154 @@
+const Detalles_Factura = require('../models/modeloDetalles_Factura');
+const {validationResult} = require('express-validator');
+const moment =require('moment');
+const msj = require('../componentes/mensaje');
+const passport = require('../configs/passport');
+const { Op } = require("sequelize");
+const { normalizeUnits } = require('moment');
+const mensaje = require('../componentes/mensaje');
+exports.validarAutenticado = passport.validarAutenticado;
+
+exports.listarDetalle_Factura = async (req, res) => {
+    try
+    {
+        const detalles = await Detalles_Factura.findAll();
+        msj("Peticion procesada correctamente", 200, detalles, res);
+    }
+    catch{
+        msj("Ocurrio un error en el servidor", 500, [], res);
+    }
+};
+
+exports.buscarDetalle_Factura = async(req,res) => {
+    console.log(req.params);
+    const {iddetalles_Factura}=req.params;
+    var mensaje ="";
+    const detalles = await Detalles_Factura.findByPk(iddetalles_Factura);
+    console.log(detalles);
+    res.json(detalles);
+}
+
+exports.GuardarDetalles_Factura = async (req, res)=> {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
+    {
+        console.log( req.body + validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
+    }
+    else
+    {
+        const { cantidad , subtotal, impuesto, total, idfacturas, idproductos} = req.body;
+        console.log(req.body);
+        if( cantidad && subtotal && impuesto && total && idfacturas && idproductos)
+        {
+            const buscarDetalle = await Detalles_Factura.findOne({
+                where:{
+                    [Op.or]:{
+                        idfacturas: idfacturas
+                    }
+                }
+            });
+            console.log(buscarDetalle);
+            if(!buscarDetalle){
+                await Detalles_Factura.create({
+                    cantidad: cantidad,
+                    subtotal: subtotal,
+                    impuesto: impuesto,
+                    total: total,
+                    idfacturas: idfacturas,
+                    idproductos:idproductos,
+                }).then((data)=>{
+                   msj("Datos procesados correctamente", 200, data, res);
+                }).catch((error)=>{
+                    msj("Datos procesados incorrectamente", 200, error, res);
+                });
+            }
+            else{
+                const mensaje={
+                    msj:"El Detalle ya existe",
+                };
+                msj("Datos procesados correctamente", 200, mensaje, res);
+            }
+
+            
+        }
+        else
+        {
+            msj("Faltan algunos datos necesarios para el procesamiento de la petición", 200, [], res);
+        }
+    }
+};
+
+exports.EliminarDetalles_Factura = async (req, res) => {
+    const { iddetalles_Factura  } =  req.params;
+    if(!iddetalles_Factura )
+    {
+        res.send("Debe enviar el id del detalle ")
+    }
+    else{
+         const buscarDetalle = await Detalles_Factura.findOne({
+            where:{
+                iddetalles_Factura : iddetalles_Factura ,
+            } 
+         });
+         if(!buscarDetalle){
+             res.send("El detalle no existe");
+         }
+         else{
+             await Detalles_Factura.destroy({
+                where:{
+                    iddetalles_Factura :iddetalles_Factura ,
+                }
+             }).then((data) => {
+                 console.log(data);
+                 res.send("El registro ha sido eliminado");
+             }).catch((error)=>{
+                 console.log(error);
+                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
+             });
+         }
+    }
+};
+
+exports.ModificarDetalles_Factura = async (req, res)=> {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
+    {
+        console.log(validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
+    }
+    else
+    {
+        const { iddetalles_Factura } = req.query;
+        const { cantidad, subtotal, impuesto, total, idfacturas, idproductos} = req.body;
+        const buscarDetalle =await Detalles_Factura.findOne({
+            where:{
+                iddetalles_Factura: iddetalles_Factura
+            }
+        });
+        console.log(buscarDetalle);
+        if(!buscarDetalle){
+            msj("Datos procesados incorrectamente", 200, [], res);
+        } 
+        else{
+
+                buscarDetalle.cantidad= cantidad;
+                buscarDetalle.subtotal = subtotal;
+                buscarDetalle.impuesto = impuesto;
+                buscarDetalle.total = total;
+                buscarDetalle.idfacturas = idfacturas;
+                buscarDetalle.idproductos = idproductos;
+                await buscarDetalle.save().then((data)=>{
+                    console.log(data);
+                    msj("Datos procesados correctamente", 200, data, res);
+                })
+                .catch((error)=>
+                {
+                    console.log(error);
+                    msj("Error al actualizar el registro",200, error, res);
+                });
+            
+        }
+    }
+};
+
