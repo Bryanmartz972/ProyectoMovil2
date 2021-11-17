@@ -43,9 +43,9 @@ exports.GuardarProducto = async (req, res)=> {
     }
     else
     {
-        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo, imagen_producto} = req.body;
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo} = req.body;
         console.log(req.body);
-        if(nombre_producto && cantidad_producto && precio_producto && marca_producto && idcategorias && costo && imagen_producto)
+        if(nombre_producto && cantidad_producto && precio_producto && marca_producto && idcategorias && costo)
         {
             const buscarProducto = await Producto.findOne({
                 where:{
@@ -63,7 +63,6 @@ exports.GuardarProducto = async (req, res)=> {
                     marca_producto: marca_producto,
                     idcategorias: idcategorias,
                     costo: costo,
-                    imagen_producto: imagen_producto,
                 }).then((data)=>{
                    msj("Datos procesados correctamente", 200, data, res);
                 }).catch((error)=>{
@@ -130,7 +129,7 @@ exports.ModificarProducto = async (req, res)=> {
     else
     {
         const { idproductos } = req.query;
-        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo, imagen_producto} = req.body;
+        const { nombre_producto, cantidad_producto, precio_producto, marca_producto, idcategorias, costo} = req.body;
         const buscarProducto =await Producto.findOne({
             where:{
                 idproductos: idproductos
@@ -147,7 +146,6 @@ exports.ModificarProducto = async (req, res)=> {
                 buscarProducto.marca_producto=marca_producto;
                 buscarProducto.idcategorias=idcategorias;
                 buscarProducto.costo=costo;
-                buscarProducto.imagen_producto=imagen_producto;
                 await buscarProducto.save().then((data)=>{
                     console.log(data);
                     msj("Datos procesados correctamente", 200, data, res);
@@ -157,7 +155,6 @@ exports.ModificarProducto = async (req, res)=> {
                     console.log(error);
                     msj("Error al actualizar el registro",200, error, res);
                 });
-            
         }
     }
 };
