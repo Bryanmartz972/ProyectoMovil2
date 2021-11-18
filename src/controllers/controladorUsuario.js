@@ -19,12 +19,11 @@ exports.listarUsuarios = async (req, res) => {
         res.json(buscarUsuario);
     }
     }
-    
 };
 
 exports.Guardar = async(req, res) => {
-    const { nombre_completo, nombre_usuario, correo, telefono, contrasena_encriptada, direccion_usuario } = req.body;
-    if (!nombre_completo || !nombre_usuario || !correo || !telefono || !contrasena_encriptada || !direccion_usuario)
+    const { nombre_completo, nombre_usuario, correo, telefono, contrasena_encriptada, direccion_usuario, tipo_usuario} = req.body;
+    if (!nombre_completo || !nombre_usuario || !correo || !telefono || !contrasena_encriptada || !direccion_usuario, tipo_usuario)
     {
         res.send("Debe enviar los datos completos");
     }
@@ -35,7 +34,8 @@ exports.Guardar = async(req, res) => {
             correo: correo,
             telefono: telefono,
             contrasena_encriptada: contrasena_encriptada,
-            direccion_usuario: direccion_usuario
+            direccion_usuario: direccion_usuario,
+            tipo_usuario: tipo_usuario,
         }).then((data) => {
             console.log(data);
             res.send("Registro almacenado correctamente");

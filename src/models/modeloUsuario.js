@@ -48,6 +48,11 @@ const Usuario = db.define(
             type: sequelize.STRING(255),
             allowNull: false,
         },
+        tipo_usuario: {
+            type: sequelize.INTEGER,
+            allowNull: false,
+            defaultValue: 1
+        },
     },
     {
         tableName: "usuarios",
