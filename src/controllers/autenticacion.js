@@ -4,6 +4,7 @@ const moment = require('moment');
 const msj = require('../componentes/mensaje');
 const passport = require('../configs/passport');
 const { Op } = require("sequelize");
+const EnviarCorreo = require('../configs/correo')
 exports.validarAutenticado = passport.validarAutenticado;
 exports.incioSesion = async (req, res, next)=> {
     const validacion=validationResult(req);
@@ -61,4 +62,36 @@ exports.ValidarToken = async (req, res)=> {
 exports.enviarToken = async (req, res)=> {
     const { data }= req.body;
     res.status(200).json(data);
+};
+
+exports.recuperarContrasena = async (req, res, next)=>
+{   
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty)
+    {
+        msj("Los datos ingresados no son validos", 200, validacion.array(), res);
+    }
+    else{
+    const {correo} = req.body;
+    var Buscarusuario = await ModeloUsuario.findOne({
+        where:{
+            correo:correo,
+        }
+    });
+    const rcontrasena='123';
+    if(Buscarusuario)
+    {
+        Buscarusuario.contrasena_encriptada=rcontrasena;
+        await Buscarusuario.save();
+        const data ={
+            correo: Buscarusuario.correo,
+            contrasena_encriptada: rcontrasena,
+        }
+        EnviarCorreo.recuperarContrasena(data);
+        msj("El correo a sido enviado", 200, [], res);
+        res.send('Correo enviado');
+    }else{
+        msj("Los datos que ingreso son invalidos", 200, [], res);
+    }
+   }
 };

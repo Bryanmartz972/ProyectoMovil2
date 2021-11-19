@@ -10,4 +10,10 @@ router.post('/iniciosesion/',
     controladorAutenticacion.incioSesion,
 );
 router.get('/error/', controladorAutenticacion.ValidarToken);
+
+router.post('/recuperacion/',
+    body('correo')
+    .isEmpty().withMessage('Debe enviar los datos del usuario correo'),
+    controladorAutenticacion.recuperarContrasena,
+);
 module.exports=router;
