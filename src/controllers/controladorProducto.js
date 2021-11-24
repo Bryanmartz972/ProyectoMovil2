@@ -24,6 +24,90 @@ exports.listarProducto2 = async (req, res) => {
     res.json(producto)
 };
 
+exports.listarCamisas = async (req, res) => {
+    const { idcategorias } =  req.query;
+    if(!idcategorias)
+    {
+        res.send("Debe enviar la categoria del producto ")
+    }else{
+    const buscarProducto = await Producto.findAll({
+        where: {
+            idcategorias: idcategorias
+        }
+    });
+    
+    if (!buscarProducto){
+        res.send("El categoria no existe");
+    }else{
+        console.log(buscarProducto);
+        res.json(buscarProducto);
+    }
+    }
+};
+
+exports.listarJoggers = async (req, res) => {
+    const { idcategorias } =  req.query;
+    if(!idcategorias)
+    {
+        res.send("Debe enviar la categoria del producto ")
+    }else{
+    const buscarProducto = await Producto.findAll({
+        where: {
+            idcategorias: idcategorias
+        }
+    });
+    
+    if (!buscarProducto){
+        res.send("El categoria no existe");
+    }else{
+        console.log(buscarProducto);
+        res.json(buscarProducto);
+    }
+    }
+};
+
+exports.listarSneakers = async (req, res) => {
+    const { idcategorias } =  req.query;
+    if(!idcategorias)
+    {
+        res.send("Debe enviar la categoria del producto ")
+    }else{
+    const buscarProducto = await Producto.findAll({
+        where: {
+            idcategorias: idcategorias
+        }
+    });
+    
+    if (!buscarProducto){
+        res.send("El categoria no existe");
+    }else{
+        console.log(buscarProducto);
+        res.json(buscarProducto);
+    }
+    }
+};
+
+exports.listarAccesorios = async (req, res) => {
+    const { idcategorias } =  req.query;
+    if(!idcategorias)
+    {
+        res.send("Debe enviar la categoria del producto ")
+    }else{
+    const buscarProducto = await Producto.findAll({
+        where: {
+            idcategorias: idcategorias
+        }
+    });
+    
+    if (!buscarProducto){
+        res.send("El categoria no existe");
+    }else{
+        console.log(buscarProducto);
+        res.json(buscarProducto);
+    }
+    }
+};
+
 exports.buscarProducto = async(req,res) => {
     console.log(req.params);
     const {idproductos}=req.params;
