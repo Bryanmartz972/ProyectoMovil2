@@ -89,7 +89,6 @@ exports.recuperarContrasena = async (req, res, next)=>
         }
         EnviarCorreo.recuperarContrasena(data);
         msj("El correo a sido enviado", 200, [], res);
-        res.send('Correo enviado');
     }else{
         msj("Los datos que ingreso son invalidos", 200, [], res);
     }

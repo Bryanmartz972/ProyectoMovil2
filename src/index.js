@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const passport = require('passport');
 const app = express();
 const path = require('path');
+require("dotenv").config();
 app.set('port', process.env.port || 3001);
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
@@ -15,7 +16,7 @@ app.set('json spaces', 2);
 app.use(passport.initialize());
 
 //Rutas
-app.use('img/usuarios',express.static(path.join(__dirname, 'public/img')));
+app.use('usuarios/img',express.static(path.join(__dirname, 'public/img')));
 app.use('/api/',require('./routes/index'));
 app.use('/api/usuarios/',require('./routes/usuarios'));
 app.use('/api/productos/',require('./routes/productos'));
