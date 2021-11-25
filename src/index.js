@@ -24,6 +24,7 @@ app.use('/api/tarjetas/',require('./routes/tarjetas'));
 app.use('/api/categorias/',require('./routes/Categorias'));
 app.use('/api/facturas/',require('./routes/facturas'));
 app.use('/api/detalles_factura/',require('./routes/detalles_factura'));
+app.use('/api/archivos', require('./routes/archivos'));
 app.use('/api/autenticacion', require('./routes/autenticacion'));
 
 

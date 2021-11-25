@@ -75,6 +75,10 @@ const Producto = db.define(
                 }
             },
         },
+        imagen_producto:{
+            type: sequelize.BLOB,
+            allowNull: false
+        }
     },
     {
         tableName: "productos",
