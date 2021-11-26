@@ -1,4 +1,6 @@
+const fs = require('fs');
 const msj = require('../componentes/mensaje');
+const path = require('path');
 const Producto = require('../models/modeloProducto');
 exports.Recibir = async(req, res) =>
 {
@@ -8,17 +10,30 @@ exports.Recibir = async(req, res) =>
     console.log(idproductos);
     var buscarProducto = await Producto.finOne({
         where:{
-            idproductos:idproductos
+            idproductos:idproductos 
         }
     });
     if(!buscarProducto){
         msj("El producto no existe", 200, [], res);
     }
     else{
-        buscarProducto.imagen_producto=filename;
+        const buscarimagen = fs.existsSync(path.join(__dirname, '../public/img/' +buscarProducto.imagen));
+        if(!buscarimagen){
+            console.log('La imagen no existe');
+        }
+        else{
+            try{
+                fs.unlinkSync(path.join(__dirname, '../public/img/' + buscarProducto.imagen));
+                console.log("Imagen eliminada");
+            }catch(error){
+                console.log(error);
+                console.log("No se elimino la imagen");
+            }
+        }
+        buscarProducto.imagen=filename;
         await buscarProducto.save()
         .then((data)=>{
-            console.log(data);
+            //console.log(data);
             msj("Archivo almacenado", [], res);
         })
         .catch((error)=>{

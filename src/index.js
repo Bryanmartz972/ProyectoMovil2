@@ -16,7 +16,7 @@ app.set('json spaces', 2);
 app.use(passport.initialize());
 
 //Rutas
-app.use('usuarios/img',express.static(path.join(__dirname, 'public/img')));
+app.use('usuario/img',express.static(path.join(__dirname, 'public/img')));
 app.use('/api/',require('./routes/index'));
 app.use('/api/usuarios/',require('./routes/usuarios'));
 app.use('/api/productos/',require('./routes/productos'));
