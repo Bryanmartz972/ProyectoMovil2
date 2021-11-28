@@ -203,7 +203,7 @@ exports.EliminarProducto = async (req, res) => {
 };
 
 exports.ModificarProducto = async (req, res)=> {
-    //const { id } = req.query;
+    
     const validacion=validationResult(req);
     if (!validacion.isEmpty())
     {
@@ -230,6 +230,42 @@ exports.ModificarProducto = async (req, res)=> {
                 buscarProducto.marca_producto=marca_producto;
                 buscarProducto.idcategorias=idcategorias;
                 buscarProducto.costo=costo;
+                await buscarProducto.save().then((data)=>{
+                    console.log(data);
+                    msj("Datos procesados correctamente", 200, data, res);
+                })
+                .catch((error)=>
+                {
+                    console.log(error);
+                    msj("Error al actualizar el registro",200, error, res);
+                });
+        }
+    }
+};
+
+exports.ModificarCantidadProducto = async (req, res)=> {
+    
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty())
+    {
+        console.log(validacion.array());
+        msj("Los datos ingresados no son validos", 200, validacion.array(),res);
+    }
+    else
+    {
+        const { idproductos } = req.query;
+        const { cantidad_producto } = req.body;
+        const buscarProducto =await Producto.findOne({
+            where:{
+                idproductos: idproductos
+            }
+        });
+        console.log(buscarProducto);
+        if(!buscarProducto){
+            msj("Datos procesados incorrectamente", 200, [], res);
+        } 
+        else{
+                buscarProducto.cantidad_producto=cantidad_producto;
                 await buscarProducto.save().then((data)=>{
                     console.log(data);
                     msj("Datos procesados correctamente", 200, data, res);

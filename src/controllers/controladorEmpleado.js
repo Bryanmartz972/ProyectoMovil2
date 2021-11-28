@@ -1,22 +1,22 @@
-const Usuario = require('../models/modeloUsuario');
+const Empleado = require('../models/modeloEmpleado');
 
-exports.listarUsuarios = async (req, res) => {
+exports.listarEmpleados = async (req, res) => {
     const { nombre_usuario } =  req.query;
     if(!nombre_usuario)
     {
         res.send("Debe enviar el nombre de usuario ")
     }else{
-    const buscarUsuario = await Usuario.findOne({
+    const buscarEmpleado = await Empleado.findOne({
         where: {
             nombre_usuario: nombre_usuario
         }
     });
     
-    if (!buscarUsuario){
+    if (!buscarEmpleado){
         res.send("El usuario no existe");
     }else{
-        console.log(buscarUsuario);
-        res.json(buscarUsuario);
+        console.log(buscarEmpleado);
+        res.json(buscarEmpleado);
     }
     }
 };
@@ -28,7 +28,7 @@ exports.Guardar = async(req, res) => {
         res.send("Debe enviar los datos completos");
     }
     else{
-        const nuevoUsuario = await Usuario.create({
+        const nuevoEmpleado = await Empleado.create({
             nombre_completo: nombre_completo,
             nombre_usuario: nombre_usuario,
             correo: correo,
@@ -45,54 +45,53 @@ exports.Guardar = async(req, res) => {
     }
 };
 
-
-exports.EliminarParamsUsuario = async (req, res) => {
-    const { idusuario } =  req.params;
-    if(!idusuario)
+exports.EliminarParamsEmpleado = async (req, res) => {
+    const { idempleado } =  req.params;
+    if(!idempleado)
     {
-        res.send("Debe enviar el id del usuario ")
+        res.send("Debe enviar el id del empleado ")
     }
     else{
-         const buscarUsuario = await Usuario.findOne({
+         const buscarEmpleado = await Empleado.findOne({
             where:{
-                idusuario: idusuario,
+                idempleado: idempleado,
             } 
          });
-         if(!buscarUsuario){
-             res.send("El usuario no existe");
+         if(!buscarEmpleado){
+             res.send("El empleado no existe");
          }
          else{
-             await Usuario.destroy({
+             await Empleado.destroy({
                 where:{
-                    idusuario:idusuario,
+                    idempleado:idempleado,
                 }
              }).then((data) => {
                  console.log(data);
                  res.send("El registro ha sido eliminado");
              }).catch((error)=>{
                  console.log(error);
-                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
+                 res.send("El registro no fue eleminado, porque hay un error en el servidor")
              });
          }
     }
 };
 
 exports.ActualizarQuery = async (req, res) => {
-    const {idusuario} = req.query;
+    const { idempleado } = req.query;
     const { nombre_completo, nombre_usuario, correo, telefono, contrasena_encriptada, direccion_usuario }=req.body;
 
-    if (!idusuario)
+    if (!idempleado)
     {
-        res.send("Debe enviar el id del usuario");
+        res.send("Debe enviar el id del empleado");
     }
     else{
-        var buscarUsuario = await Usuario.findOne({
+        var buscarEmpleado = await Empleado.findOne({
             where: {
-                idusuario: idusuario,
+                idempleado: idempleado,
             }
         });
-        if (!buscarUsuario){
-            res.send("El usuario no existe");
+        if (!buscarEmpleado){
+            res.send("El empleado no existe");
         }
         else{
 
@@ -101,14 +100,14 @@ exports.ActualizarQuery = async (req, res) => {
                 res.send("Debe enviar los datos completos");
             }
             else{
-                buscarUsuario.nombre_completo=nombre_completo;
-                buscarUsuario.nombre_usuario=nombre_usuario;
-                buscarUsuario.correo=correo;
-                buscarUsuario.telefono=telefono;
-                buscarUsuario.contrasena_encriptada=contrasena_encriptada;
-                buscarUsuario.direccion_usuario=direccion_usuario;
-                await buscarUsuario.save();
-                console.log(buscarUsuario);
+                buscarEmpleado.nombre_completo=nombre_completo;
+                buscarEmpleado.nombre_usuario=nombre_usuario;
+                buscarEmpleado.correo=correo;
+                buscarEmpleado.telefono=telefono;
+                buscarEmpleado.contrasena_encriptada=contrasena_encriptada;
+                buscarEmpleado.direccion_usuario=direccion_usuario;
+                await buscarEmpleado.save();
+                console.log(buscarEmpleado);
                 res.send("Registro actualizado");
             }
         }
