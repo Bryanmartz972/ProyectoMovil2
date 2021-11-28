@@ -4,7 +4,9 @@ const controladorUsuario = require('../../controllers/controladorUsuario');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 const {body, param} = require('express-validator');
 
-
+router.put('/',controladorUsuario.ActualizarLog);
+router.delete('/:nombre_usuario',controladorUsuario.EliminarUsuarioLog);
+router.get('/listar1',controladorUsuario.listar1);
 router.get('/',controladorAutenticacion.validarAutenticado ,controladorUsuario.listarUsuarios);
 
 router.post('/',
@@ -17,6 +19,7 @@ body('direccion_usuario').isLength({min:10}).withMessage("La direccion del usuar
 controladorAutenticacion.validarAutenticado, controladorUsuario.Guardar);
 
 router.delete('/:idusuario',controladorAutenticacion.validarAutenticado,controladorUsuario.EliminarParamsUsuario);
+
 
 
 router.put('/',
