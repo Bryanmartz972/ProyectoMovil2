@@ -2,15 +2,14 @@ const sequelize = require('sequelize');
 const db = require('../configs/db');
 const bcrypt = require('bcrypt');
 
-const Usuario = db.define(
-    "usuarios",
+const Empleado = db.define(
+    "empleados",
     {
-        idusuario: {
+        idempleado: {
             type: sequelize.INTEGER,
             primaryKey: true,
             autoIncrement: true,
             allowNull: false,
-            
         },
         nombre_completo: {
             type: sequelize.STRING(255),
@@ -50,24 +49,24 @@ const Usuario = db.define(
         },
     },
     {
-        tableName: "usuarios",
+        tableName: "empleados",
         timestamps: false,
         hooks : {
-            beforeCreate(Usuario) {
-              const hash = bcrypt.hashSync(Usuario.contrasena_encriptada, 10);
-              Usuario.contrasena_encriptada = hash;
+            beforeCreate(Empleado) {
+              const hash = bcrypt.hashSync(Empleado.contrasena_encriptada, 10);
+              Empleado.contrasena_encriptada = hash;
             },
-            beforeUpdate(Usuario){
-              const hash = bcrypt.hashSync(Usuario.contrasena_encriptada, 10);
-              Usuario.contrasena_encriptada = hash;
+            beforeUpdate(Empleado){
+              const hash = bcrypt.hashSync(Empleado.contrasena_encriptada, 10);
+              Empleado.contrasena_encriptada = hash;
             }
           },  
     },
 
    
 );
-Usuario.prototype.verificarContrasena = (con, com)=>{
+Empleado.prototype.verificarContrasena = (con, com)=>{
     return bcrypt.compareSync(con, com);
 }
 
-module.exports = Usuario;
+module.exports = Empleado;

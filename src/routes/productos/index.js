@@ -28,6 +28,8 @@ param('idcategorias').isEmpty().withMessage('No se permiten campos vacios'),
 param('idtallas').isEmpty().withMessage('No se permiten campos vacios'),
 controladorAutenticacion.validarAutenticado,controladorProducto.ModificarProducto);
 
+router.put('/modificarCantidad', controladorProducto.ModificarCantidadProducto);
+
 router.delete('/:idproductos', controladorProducto.EliminarProducto);
 
 module.exports=router;
