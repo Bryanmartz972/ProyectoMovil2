@@ -34,12 +34,13 @@ exports.Guardar = async(req, res) => {
             correo: correo,
             telefono: telefono,
             contrasena_encriptada: contrasena_encriptada,
-            direccion_usuario: direccion_usuario,
+            direccion_usuario: direccion_usuario
         }).then((data) => {
             console.log(data);
             res.send("Registro almacenado correctamente");
         }).catch((error)=>{
             console.log(error);
+            res.send(error);
             res.send("Error al guardar los datos");
         });
     }

@@ -256,33 +256,30 @@ exports.ModificarProducto = async (req, res) => {
 };
 
 exports.ModificarCantidadProducto = async (req, res) => {
-  const validacion = validationResult(req);
-  if (!validacion.isEmpty()) {
-    console.log(validacion.array());
-    msj("Los datos ingresados no son validos", 200, validacion.array(), res);
+  const { idproductos } = req.query;
+  const { cantidad_producto } = req.body;
+
+  if (!idproductos) {
+    res.send("Debe enviar el id del producto");
   } else {
-    const { idproductos } = req.query;
-    const { cantidad_producto } = req.body;
-    const buscarProducto = await Producto.findOne({
+    var buscarProducto = await Producto.findOne({
       where: {
         idproductos: idproductos,
       },
     });
-    console.log(buscarProducto);
     if (!buscarProducto) {
-      msj("Datos procesados incorrectamente", 200, [], res);
+      res.send("El producto no existe");
     } else {
-      buscarProducto.cantidad_producto = cantidad_producto;
-      await buscarProducto
-        .save()
-        .then((data) => {
-          console.log(data);
-          msj("Datos procesados correctamente", 200, data, res);
-        })
-        .catch((error) => {
-          console.log(error);
-          msj("Error al actualizar el registro", 200, error, res);
-        });
+      if (
+        !cantidad_producto
+      ) {
+        res.send("Debe enviar los datos completos");
+      } else {
+        buscarProducto.cantidad_producto = cantidad_producto;
+        await buscarProducto.save();
+        console.log(buscarProducto);
+        res.send("Registro actualizado");
+      }
     }
   }
 };
