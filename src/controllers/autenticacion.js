@@ -1,4 +1,5 @@
 const ModeloUsuario = require('../models/modeloUsuario');
+const ModeloEmpleado = require('../models/modeloEmpleado')
 const {validationResult} = require('express-validator');
 const moment = require('moment');
 const msj = require('../componentes/mensaje');
@@ -6,6 +7,7 @@ const passport = require('../configs/passport');
 const { Op } = require("sequelize");
 const EnviarCorreo = require('../configs/correo')
 exports.validarAutenticado = passport.validarAutenticado;
+
 exports.incioSesion = async (req, res, next)=> {
     const validacion=validationResult(req);
     if (!validacion.isEmpty)
@@ -54,6 +56,56 @@ exports.incioSesion = async (req, res, next)=> {
         }
     }
 };
+
+exports.incioSesionEmpleado = async (req, res, next)=> {
+    const validacion=validationResult(req);
+    if (!validacion.isEmpty)
+    {
+        msj("Los datos ingresados no son validos", 200, validacion.array(), res);
+    }
+    else{
+        const {nombre_usuario, contrasena_encriptada} = req.body;
+        const BuscarEmpleado = await ModeloEmpleado.findOne({
+            where:{
+                [Op.and]:[{
+                    [Op.or]:
+                    [
+                        {nombre_usuario: nombre_usuario}                        
+                    ],
+                }],
+            }
+        });
+        if(!BuscarEmpleado)
+        {
+            msj("El cliente no existe o se encuentra inactivo", 200,[], res);
+        }
+        else
+        {
+            if(!BuscarEmpleado.verificarContrasena(contrasena_encriptada, BuscarEmpleado.contrasena_encriptada))
+            {
+                msj("El cliente no existe o contrasena invalida", 200, [], res);
+            }
+            else
+            {
+                const emp = {
+                    idempleado: BuscarEmpleado.idempleado,
+                    nombre_completo: BuscarEmpleado.nombre_completo,
+                    nombre_usuario: BuscarEmpleado.nombre_usuario,
+                    correo: BuscarEmpleado.correo,
+                    telefono: BuscarEmpleado.telefono,
+                    direccion_usuario: BuscarEmpleado.direccion_usuario
+                };
+                const token = passport.getToken({idempleado: BuscarEmpleado.idempleado});
+                const data = {
+                    token: token,
+                    cliente: emp
+                };
+                msj("Bienvenido, " + emp.nombre_completo, 200, data, res);
+            }
+        }
+    }
+};
+
 exports.ValidarToken = async (req, res)=> {
     const { data }= req.body;
     //console.log(req);
