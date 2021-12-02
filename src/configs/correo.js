@@ -3,11 +3,11 @@ exports.recuperarContrasena= async (data) =>
 {
     const configurarCorreo= {
         from: process.env.APP_CORREO,
-        to: date.correo,
+        to: data.correo,
         subject: "Recuperacion de contrasena",
-        text: "Contrasena temporal :" + data.contrasena_encriptada,
+        text: 'Contrasena temporal :' + data.contrasena_encriptada,
 
-    }
+    };
 
 
 const transporte = nodemailer.createTransport({
@@ -26,6 +26,7 @@ transporte.verify(function(error, success)
 {
     if(error){
         console.log(error);
+        return false;
     } else{
         console.log("El servidor puede enviar mensajes");
     }
