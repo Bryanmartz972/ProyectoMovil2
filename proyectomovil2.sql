@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `proyectomovil2` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `proyectomovil2`;
 -- MySQL dump 10.13  Distrib 8.0.26, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: proyectomovil2
@@ -26,7 +28,7 @@ CREATE TABLE `categorias` (
   `idcategorias` int NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(45) NOT NULL,
   PRIMARY KEY (`idcategorias`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +37,7 @@ CREATE TABLE `categorias` (
 
 LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-INSERT INTO `categorias` VALUES (1,'Camisas'),(2,'Pantalones'),(3,'Tenis');
+INSERT INTO `categorias` VALUES (1,'Camisas'),(2,'Joggers'),(3,'Sneakers'),(4,'Accesorios');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -72,6 +74,35 @@ LOCK TABLES `detalles_factura` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `empleados`
+--
+
+DROP TABLE IF EXISTS `empleados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `empleados` (
+  `idempleado` int NOT NULL AUTO_INCREMENT,
+  `nombre_completo` varchar(255) DEFAULT NULL,
+  `nombre_usuario` varchar(45) DEFAULT NULL,
+  `correo` varchar(255) DEFAULT NULL,
+  `telefono` varchar(15) DEFAULT NULL,
+  `contrasena_encriptada` varchar(255) DEFAULT NULL,
+  `direccion_usuario` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`idempleado`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `empleados`
+--
+
+LOCK TABLES `empleados` WRITE;
+/*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
+INSERT INTO `empleados` VALUES (1,'Bryan Samuel Martinez Zelaya','BryanRoot123','bryanmartz972@gmail.com','87321951','$2b$10$x7BGDU86DiWTKZZXQ19kyuhBkqxX.7OViS8d2PB0zgLkpTFJ8IQJ6','Residencial Centro America Este');
+/*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `facturas`
 --
 
@@ -82,11 +113,8 @@ CREATE TABLE `facturas` (
   `idfacturas` int NOT NULL AUTO_INCREMENT,
   `fecha_factura` varchar(45) NOT NULL,
   `idusuario` int NOT NULL,
-  `idpagos` int NOT NULL,
   PRIMARY KEY (`idfacturas`),
   KEY `fk_Facturas_Usuario1_idx` (`idusuario`),
-  KEY `fk_Facturas_Pagos1_idx` (`idpagos`),
-  CONSTRAINT `fk_Facturas_Pagos1` FOREIGN KEY (`idpagos`) REFERENCES `pagos` (`idpagos`),
   CONSTRAINT `fk_Facturas_Usuario1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -98,29 +126,6 @@ CREATE TABLE `facturas` (
 LOCK TABLES `facturas` WRITE;
 /*!40000 ALTER TABLE `facturas` DISABLE KEYS */;
 /*!40000 ALTER TABLE `facturas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pagos`
---
-
-DROP TABLE IF EXISTS `pagos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `pagos` (
-  `idpagos` int NOT NULL AUTO_INCREMENT,
-  `descripcion_pago` varchar(45) NOT NULL,
-  PRIMARY KEY (`idpagos`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pagos`
---
-
-LOCK TABLES `pagos` WRITE;
-/*!40000 ALTER TABLE `pagos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pagos` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -137,14 +142,12 @@ CREATE TABLE `productos` (
   `precio_producto` double NOT NULL,
   `marca_producto` varchar(45) NOT NULL,
   `idcategorias` int NOT NULL,
-  `idtallas` int NOT NULL,
   `costo` double NOT NULL,
+  `imagen_producto` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`idproductos`),
   KEY `fk_Productos_Categorias_idx` (`idcategorias`),
-  KEY `fk_Productos_Tallas1_idx` (`idtallas`),
-  CONSTRAINT `fk_Productos_Categorias` FOREIGN KEY (`idcategorias`) REFERENCES `categorias` (`idcategorias`),
-  CONSTRAINT `fk_Productos_Tallas1` FOREIGN KEY (`idtallas`) REFERENCES `tallas` (`idtallas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  CONSTRAINT `fk_Productos_Categorias` FOREIGN KEY (`idcategorias`) REFERENCES `categorias` (`idcategorias`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -153,30 +156,8 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` VALUES (17,'Prueba6',205,200,'Adidas',1,300,NULL),(18,'Prueba7',200,200,'Adidas',2,300,NULL),(21,'Camisa Amarilla',120,100,'Adidas',2,200,'hola.png'),(23,'Camisa roja',60,100,'Adidas',2,200,'hola.png'),(24,'Prueba1',100,100,'Adidas',2,100,'prueba1.png'),(26,'Tenis1',200,250,'Nike',3,300,'tenis1.png'),(27,'Tenis2',200,255,'Gucci',3,350,'tenis2.png'),(28,'Accesorios1',300,300,'Polo',4,400,'accesorios1.png'),(29,'Accesorios2',100,120,'Nike',4,500,'accesorios2.png'),(30,'Camisa2',150,300,'Polo',1,250,'camisa2.png');
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tallas`
---
-
-DROP TABLE IF EXISTS `tallas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tallas` (
-  `idtallas` int NOT NULL AUTO_INCREMENT,
-  `descripcion_talla` varchar(45) NOT NULL,
-  PRIMARY KEY (`idtallas`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tallas`
---
-
-LOCK TABLES `tallas` WRITE;
-/*!40000 ALTER TABLE `tallas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tallas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -196,7 +177,7 @@ CREATE TABLE `tarjetas` (
   PRIMARY KEY (`idtarjetas`),
   KEY `fk_tarjetas_Usuario1_idx` (`idusuario`),
   CONSTRAINT `fk_tarjetas_Usuario1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,6 +186,7 @@ CREATE TABLE `tarjetas` (
 
 LOCK TABLES `tarjetas` WRITE;
 /*!40000 ALTER TABLE `tarjetas` DISABLE KEYS */;
+INSERT INTO `tarjetas` VALUES (1,'1234567891234567','2021-01-01','256','BAC',3),(2,'1234123412341234','2023-11-30','972','BAC',3),(3,'1231231231231234','2022-02-16','218','Ficohsa',18);
 /*!40000 ALTER TABLE `tarjetas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +206,7 @@ CREATE TABLE `usuarios` (
   `contrasena_encriptada` varchar(255) NOT NULL,
   `direccion_usuario` varchar(255) NOT NULL,
   PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +215,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Otoniel','otoniel124','otonielaguirre123@gmail.com','12345678','Otoniel123','Universidad Catolica de Honduras'),(2,'Bryan','bryan123','bryanmartz972@gmail.com','12345678','bryan123','Universidad Catolica de Honduras');
+INSERT INTO `usuarios` VALUES (3,'Bryan Samuel Martinez Zelaya','Bryan972','bryanmartz972@gmail.com','87321951','$2b$10$HpPUdLROqjsNpb2u1OBuQ.RWMveG5rvyV62heWUGsOn0zoiDSIWx.','Residencial Centro America Este'),(18,'Samuel Zelaya','Samuel123','bryanmartz972@gmail.com','87321951','$2b$10$WTsm1wiC5180qdlpu/tKTeQ8sgZBXv8XgZEGr4VOs1h0RPreq.Gry','Cerca de mi casa');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -246,4 +228,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-02 20:41:18
+-- Dump completed on 2021-12-03  1:04:19
