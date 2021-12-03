@@ -112,11 +112,6 @@ exports.buscarProducto = async (req, res) => {
 };
 
 exports.GuardarProducto = async (req, res) => {
-  const validacion = validationResult(req);
-  if (!validacion.isEmpty()) {
-    console.log(req.body + validacion.array());
-    msj("Los datos ingresados no son validos", 200, validacion.array(), res);
-  } else {
     const {
       nombre_producto,
       cantidad_producto,
@@ -174,7 +169,6 @@ exports.GuardarProducto = async (req, res) => {
         res
       );
     }
-  }
 };
 
 exports.EliminarProducto = async (req, res) => {

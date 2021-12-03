@@ -16,7 +16,7 @@ body('correo').isEmail().withMessage("Debe de tener un formato de correo electro
 body('telefono').isLength({min:8}).withMessage("El telefono no debe ser menor a 8 caracteres"),
 body('contrasena_encriptada').isLength({min:6}).withMessage("La longitud minima del nombre es de 6"),
 body('direccion_usuario').isLength({min:10}).withMessage("La direccion del usuario no debe ser menor a 10 caracteres"),
-controladorAutenticacion.validarAutenticado, controladorUsuario.Guardar);
+controladorUsuario.Guardar);
 
 router.delete('/:idusuario',controladorAutenticacion.validarAutenticado,controladorUsuario.EliminarParamsUsuario);
 
