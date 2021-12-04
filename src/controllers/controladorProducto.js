@@ -1,9 +1,10 @@
 const Producto = require("../models/modeloProducto");
+const Categoria = require("../models/modeloCategorias");
 const { validationResult } = require("express-validator");
 const moment = require("moment");
 const msj = require("../componentes/mensaje");
 const passport = require("../configs/passport");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const { normalizeUnits } = require("moment");
 const mensaje = require("../componentes/mensaje");
 exports.validarAutenticado = passport.validarAutenticado;
@@ -23,23 +24,12 @@ exports.listarProducto2 = async (req, res) => {
 };
 
 exports.listarCamisas = async (req, res) => {
-  const { idcategorias } = req.query;
-  if (!idcategorias) {
-    res.send("Debe enviar la categoria del producto ");
-  } else {
-    const buscarProducto = await Producto.findAll({
-      where: {
-        idcategorias: idcategorias,
-      },
-    });
-
-    if (!buscarProducto) {
-      res.send("El categoria no existe");
-    } else {
-      console.log(buscarProducto);
-      res.json(buscarProducto);
+  const camisas = await Producto.findAll({
+    where:{
+      idcategorias : Sequelize.literal("SELECT idcategorias FROM categorias where descripcion = 'Camisas'") 
     }
-  }
+  });
+  res.json(camisas);
 };
 
 exports.listarJoggers = async (req, res) => {
@@ -112,63 +102,63 @@ exports.buscarProducto = async (req, res) => {
 };
 
 exports.GuardarProducto = async (req, res) => {
-    const {
-      nombre_producto,
-      cantidad_producto,
-      precio_producto,
-      marca_producto,
-      idcategorias,
-      costo,
-      imagen_producto,
-    } = req.body;
-    console.log(req.body);
-    if (
-      nombre_producto &&
-      cantidad_producto &&
-      precio_producto &&
-      marca_producto &&
-      idcategorias &&
-      costo &&
-      imagen_producto
-    ) {
-      const buscarProducto = await Producto.findOne({
-        where: {
-          [Op.or]: {
-            nombre_producto: nombre_producto,
-          },
-        },
-      });
-      console.log(buscarProducto);
-      if (!buscarProducto) {
-        await Producto.create({
+  const {
+    nombre_producto,
+    cantidad_producto,
+    precio_producto,
+    marca_producto,
+    idcategorias,
+    costo,
+    imagen_producto,
+  } = req.body;
+  console.log(req.body);
+  if (
+    nombre_producto &&
+    cantidad_producto &&
+    precio_producto &&
+    marca_producto &&
+    idcategorias &&
+    costo &&
+    imagen_producto
+  ) {
+    const buscarProducto = await Producto.findOne({
+      where: {
+        [Op.or]: {
           nombre_producto: nombre_producto,
-          cantidad_producto: cantidad_producto,
-          precio_producto: precio_producto,
-          marca_producto: marca_producto,
-          idcategorias: idcategorias,
-          costo: costo,
-          imagen_producto: imagen_producto,
+        },
+      },
+    });
+    console.log(buscarProducto);
+    if (!buscarProducto) {
+      await Producto.create({
+        nombre_producto: nombre_producto,
+        cantidad_producto: cantidad_producto,
+        precio_producto: precio_producto,
+        marca_producto: marca_producto,
+        idcategorias: idcategorias,
+        costo: costo,
+        imagen_producto: imagen_producto,
+      })
+        .then((data) => {
+          msj("Datos procesados correctamente", 200, data, res);
         })
-          .then((data) => {
-            msj("Datos procesados correctamente", 200, data, res);
-          })
-          .catch((error) => {
-            msj("Datos procesados incorrectamente", 200, error, res);
-          });
-      } else {
-        const mensaje = {
-          msj: "El producto ya existe",
-        };
-        msj("Datos procesados correctamente", 200, mensaje, res);
-      }
+        .catch((error) => {
+          msj("Datos procesados incorrectamente", 200, error, res);
+        });
     } else {
-      msj(
-        "Faltan algunos datos necesarios para el procesamiento de la petición",
-        200,
-        [],
-        res
-      );
+      const mensaje = {
+        msj: "El producto ya existe",
+      };
+      msj("Datos procesados correctamente", 200, mensaje, res);
     }
+  } else {
+    msj(
+      "Faltan algunos datos necesarios para el procesamiento de la petición",
+      200,
+      [],
+      res
+    );
+  }
 };
 
 exports.EliminarProducto = async (req, res) => {
@@ -264,9 +254,7 @@ exports.ModificarCantidadProducto = async (req, res) => {
     if (!buscarProducto) {
       res.send("El producto no existe");
     } else {
-      if (
-        !cantidad_producto
-      ) {
+      if (!cantidad_producto) {
         res.send("Debe enviar los datos completos");
       } else {
         buscarProducto.cantidad_producto = cantidad_producto;

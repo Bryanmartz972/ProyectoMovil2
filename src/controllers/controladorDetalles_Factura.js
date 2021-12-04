@@ -8,9 +8,12 @@ const { normalizeUnits } = require('moment');
 const mensaje = require('../componentes/mensaje');
 exports.validarAutenticado = passport.validarAutenticado;
 
-
 exports.listardetalle = async (req, res) => {
-    const detalle = await Detalles_Factura.findAll();
+    const detalle = await Detalles_Factura.findAll({
+        where: {
+            idfacturas: null,
+          },
+        });
     res.json(detalle);
   };
 
