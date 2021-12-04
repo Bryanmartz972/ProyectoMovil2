@@ -57,13 +57,7 @@ const Detalles_Factura = db.define(
         },
         idfacturas: {
             type: sequelize.INTEGER,
-            allowNull: false,
-            validate: {
-                is:{
-                    args: [/^[0-9]+$/],
-                    msg: "ID de factura invalido."
-                }
-            },
+            allowNull: true,
         },
         idproductos: {
             type: sequelize.INTEGER,

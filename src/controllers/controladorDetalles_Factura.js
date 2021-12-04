@@ -8,6 +8,12 @@ const { normalizeUnits } = require('moment');
 const mensaje = require('../componentes/mensaje');
 exports.validarAutenticado = passport.validarAutenticado;
 
+
+exports.listardetalle = async (req, res) => {
+    const detalle = await Detalles_Factura.findAll();
+    res.json(detalle);
+  };
+
 exports.listarDetalle_Factura = async (req, res) => {
     try
     {
@@ -36,41 +42,26 @@ exports.GuardarDetalles_Factura = async (req, res)=> {
         msj("Los datos ingresados no son validos", 200, validacion.array(),res);
     }
     else
-    {
-        const { cantidad , subtotal, impuesto, total, idfacturas, idproductos} = req.body;
+    {   
+        const { cantidad , subtotal, impuesto, total, idproductos, nombre_producto , idusuario, nombre_usuario} = req.body;
         console.log(req.body);
-        if( cantidad && subtotal && impuesto && total && idfacturas && idproductos)
+        if( cantidad && subtotal && impuesto && total  && idproductos && nombre_producto && idusuario && nombre_usuario)
         {
-            const buscarDetalle = await Detalles_Factura.findOne({
-                where:{
-                    [Op.or]:{
-                        idfacturas: idfacturas
-                    }
-                }
-            });
-            console.log(buscarDetalle);
-            if(!buscarDetalle){
-                await Detalles_Factura.create({
+            const nuevodetalle = await Detalles_Factura.create({
                     cantidad: cantidad,
                     subtotal: subtotal,
                     impuesto: impuesto,
                     total: total,
-                    idfacturas: idfacturas,
                     idproductos:idproductos,
+                    nombre_producto:nombre_producto,
+                    idusuario:idusuario,
+                    nombre_usuario:nombre_usuario
+
                 }).then((data)=>{
                    msj("Datos procesados correctamente", 200, data, res);
                 }).catch((error)=>{
                     msj("Datos procesados incorrectamente", 200, error, res);
                 });
-            }
-            else{
-                const mensaje={
-                    msj:"El Detalle ya existe",
-                };
-                msj("Datos procesados correctamente", 200, mensaje, res);
-            }
-
-            
         }
         else
         {
