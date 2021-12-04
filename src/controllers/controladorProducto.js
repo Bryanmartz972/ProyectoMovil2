@@ -196,7 +196,7 @@ exports.EliminarProducto = async (req, res) => {
         .catch((error) => {
           console.log(error);
           res.send(
-            "El registro no fue eleminado,porque hay un error en el servidor"
+            "El registro no fue eliminado, porque hay un error en el servidor"
           );
         });
     }

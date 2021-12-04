@@ -95,7 +95,7 @@ exports.EliminarDetalles_Factura = async (req, res) => {
                  res.send("El registro ha sido eliminado");
              }).catch((error)=>{
                  console.log(error);
-                 res.send("El registro no fue eleminado,porque hay un error en el servidor")
+                 res.send("El registro no fue eliminado, porque hay un error en el servidor")
              });
          }
     }
