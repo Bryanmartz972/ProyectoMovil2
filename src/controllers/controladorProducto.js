@@ -25,71 +25,38 @@ exports.listarProducto2 = async (req, res) => {
 
 exports.listarCamisas = async (req, res) => {
   const camisas = await Producto.findAll({
-    where:{
-      idcategorias : Sequelize.literal("SELECT idcategorias FROM categorias where descripcion = 'Camisas'") 
-    }
+    where: {
+      idcategorias: 6,
+    },
   });
   res.json(camisas);
 };
 
 exports.listarJoggers = async (req, res) => {
-  const { idcategorias } = req.query;
-  if (!idcategorias) {
-    res.send("Debe enviar la categoria del producto ");
-  } else {
-    const buscarProducto = await Producto.findAll({
-      where: {
-        idcategorias: idcategorias,
-      },
-    });
-
-    if (!buscarProducto) {
-      res.send("El categoria no existe");
-    } else {
-      console.log(buscarProducto);
-      res.json(buscarProducto);
-    }
-  }
+  const joggers = await Producto.findAll({
+    where: {
+      idcategorias: 7,
+    },
+  });
+  res.json(joggers);
 };
 
 exports.listarSneakers = async (req, res) => {
-  const { idcategorias } = req.query;
-  if (!idcategorias) {
-    res.send("Debe enviar la categoria del producto ");
-  } else {
-    const buscarProducto = await Producto.findAll({
-      where: {
-        idcategorias: idcategorias,
-      },
-    });
-
-    if (!buscarProducto) {
-      res.send("El categoria no existe");
-    } else {
-      console.log(buscarProducto);
-      res.json(buscarProducto);
-    }
-  }
+  const sneakers = await Producto.findAll({
+    where: {
+      idcategorias: 8,
+    },
+  });
+  res.json(sneakers);
 };
 
 exports.listarAccesorios = async (req, res) => {
-  const { idcategorias } = req.query;
-  if (!idcategorias) {
-    res.send("Debe enviar la categoria del producto ");
-  } else {
-    const buscarProducto = await Producto.findAll({
-      where: {
-        idcategorias: idcategorias,
-      },
-    });
-
-    if (!buscarProducto) {
-      res.send("La categoria no existe");
-    } else {
-      console.log(buscarProducto);
-      res.json(buscarProducto);
-    }
-  }
+  const accesorios = await Producto.findAll({
+    where: {
+      idcategorias: 9,
+    },
+  });
+  res.json(accesorios);
 };
 
 exports.buscarProducto = async (req, res) => {

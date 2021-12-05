@@ -5,9 +5,9 @@ const controladorAutenticacion= require('../../controllers/autenticacion');
 const {body, param} = require('express-validator');
 
 router.get('/camisas', controladorProducto.listarCamisas);
-router.get('/', controladorProducto.listarJoggers);
-router.get('/', controladorProducto.listarSneakers);
-router.get('/', controladorProducto.listarAccesorios);
+router.get('/joggers', controladorProducto.listarJoggers);
+router.get('/sneakers', controladorProducto.listarSneakers);
+router.get('/accesorios', controladorProducto.listarAccesorios);
 
 router.get('/listar2', controladorProducto.listarProducto2);
 router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
