@@ -2,6 +2,7 @@ const fs = require('fs');
 const msj = require('../componentes/mensaje');
 const path = require('path');
 const Producto = require('../models/modeloProducto');
+
 exports.Recibir = async(req, res) =>
 {
     const {filename} = req.file;
