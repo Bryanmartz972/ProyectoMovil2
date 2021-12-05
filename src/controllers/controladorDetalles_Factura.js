@@ -131,7 +131,7 @@ exports.ModificarDetalles_Factura = async (req, res)=> {
     {
         const { idusuario } = req.query;
         const { idfacturas} = req.body;
-        var buscarDetalle =await Detalles_Factura.findAll({
+        var buscarDetalle =await Detalles_Factura.findOne({
             where:{
                 idfacturas: null,
                 idusuario: idusuario
