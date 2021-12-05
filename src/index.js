@@ -15,7 +15,7 @@ app.set("json spaces", 2);
 app.use(passport.initialize());
 
 //Rutas
-app.use("/imagenes/", express.static("public/img"));
+app.use("/imagenes/", express.static("../src/img"));
 app.use("/api/", require("./routes/index"));
 app.use("/api/usuarios/", require("./routes/usuarios"));
 app.use("/api/productos/", require("./routes/productos"));
