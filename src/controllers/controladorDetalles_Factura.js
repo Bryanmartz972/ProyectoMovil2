@@ -8,10 +8,12 @@ const { normalizeUnits } = require('moment');
 const mensaje = require('../componentes/mensaje');
 exports.validarAutenticado = passport.validarAutenticado;
 
-exports.listardetalle = async (req, res) => {
+exports.listardetalle = async (req, res) => { 
+    const {idusuario} = req.query;
     const detalle = await Detalles_Factura.findAll({
         where: {
             idfacturas: null,
+            idusuario:idusuario
           },
         });
     res.json(detalle);
@@ -104,8 +106,22 @@ exports.EliminarDetalles_Factura = async (req, res) => {
     }
 };
 
+exports.listardetalle = async (req, res) => { 
+    const {idusuario} = req.query;
+    const detalle = await Detalles_Factura.findAll({
+        where: {
+            idfacturas: null,
+            idusuario:idusuario
+          },
+        });
+    res.json(detalle);
+  };
+
+
 exports.ModificarDetalles_Factura = async (req, res)=> {
     const validacion=validationResult(req);
+    var SEVAN;
+    do{
     if (!validacion.isEmpty())
     {
         console.log(validacion.array());
@@ -113,36 +129,27 @@ exports.ModificarDetalles_Factura = async (req, res)=> {
     }
     else
     {
-        const { iddetalles_Factura } = req.query;
-        const { cantidad, subtotal, impuesto, total, idfacturas, idproductos} = req.body;
-        const buscarDetalle =await Detalles_Factura.findOne({
+        const { idusuario } = req.query;
+        const { idfacturas} = req.body;
+        var buscarDetalle =await Detalles_Factura.findAll({
             where:{
-                iddetalles_Factura: iddetalles_Factura
+                idfacturas: null,
+                idusuario: idusuario
             }
         });
         console.log(buscarDetalle);
+        SEVAN=buscarDetalle;
         if(!buscarDetalle){
             msj("Datos procesados incorrectamente", 200, [], res);
         } 
         else{
-
-                buscarDetalle.cantidad= cantidad;
-                buscarDetalle.subtotal = subtotal;
-                buscarDetalle.impuesto = impuesto;
-                buscarDetalle.total = total;
                 buscarDetalle.idfacturas = idfacturas;
-                buscarDetalle.idproductos = idproductos;
-                await buscarDetalle.save().then((data)=>{
-                    console.log(data);
-                    msj("Datos procesados correctamente", 200, data, res);
-                })
-                .catch((error)=>
-                {
-                    console.log(error);
-                    msj("Error al actualizar el registro",200, error, res);
-                });
-            
-        }
+                await buscarDetalle.save();  
+                console.log(buscarDetalle);  
+                res.send("Registro Actualizado") 
+             }
+
     }
+}while(buscarDetalle !="");
 };
 
