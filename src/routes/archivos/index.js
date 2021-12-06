@@ -4,7 +4,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function(req,file, cb){
-        cb(null,path.join(__dirname, '../../img/'))
+        cb(null,path.join(__dirname, '../../public/img'))
     },
     filename: function(req,file, cb){
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -16,5 +16,5 @@ const upload = multer({ storage: storage});
 const ControladorArchivos = require('../../controllers/archivos');
 const controladorAutenticacion= require('../../controllers/autenticacion');
 const router = Router();
-router.post('/img', controladorAutenticacion.validarAutenticado, upload.single('img'),ControladorArchivos.Recibir);
+router.post('/img', upload.single('img'),ControladorArchivos.Recibir);
 module.exports=router;

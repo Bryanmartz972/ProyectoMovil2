@@ -18,13 +18,13 @@ exports.Recibir = async(req, res) =>
         msj("El producto no existe", 200, [], res);
     }
     else{
-        const buscarimagen = fs.existsSync(path.join(__dirname, '../../img/' +buscarProducto.imagen_producto));
+        const buscarimagen = fs.existsSync(path.join(__dirname, '../../public/img' + buscarProducto.imagen_producto));
         if(!buscarimagen){
             console.log('La imagen no existe');
         }
         else{
             try{
-                fs.unlinkSync(path.join(__dirname, '../../img/' + buscarProducto.imagen_producto));
+                fs.unlinkSync(path.join(__dirname, '../../src/public/img' + buscarProducto.imagen_producto));
                 console.log("Imagen eliminada");
             }catch(error){
                 console.log(error);
