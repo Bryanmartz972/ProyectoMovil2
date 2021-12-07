@@ -10,7 +10,6 @@ router.get('/sneakers', controladorProducto.listarSneakers);
 router.get('/accesorios', controladorProducto.listarAccesorios);
 
 router.get('/listar2', controladorProducto.listarProducto2);
-router.get('/listar', controladorAutenticacion.validarAutenticado,controladorProducto.listarProducto);
 
 router.post('/guardar',
 body('nombre_producto').isLength({min:3}).withMessage('La longitud minima de la categoria es de 3 caracteres'),

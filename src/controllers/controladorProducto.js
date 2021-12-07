@@ -9,15 +9,6 @@ const { normalizeUnits } = require("moment");
 const mensaje = require("../componentes/mensaje");
 exports.validarAutenticado = passport.validarAutenticado;
 
-exports.listarProducto = async (req, res) => {
-  try {
-    const producto = await Producto.findAll();
-    msj("Peticion procesada correctamente", 200, producto, res);
-  } catch {
-    msj("Ocurrio un error en el servidor", 500, [], res);
-  }
-};
-
 exports.listarProducto2 = async (req, res) => {
   const producto = await Producto.findAll();
   res.json(producto);
@@ -76,7 +67,6 @@ exports.GuardarProducto = async (req, res) => {
     marca_producto,
     idcategorias,
     costo,
-    imagen_producto,
   } = req.body;
   console.log(req.body);
   if (
@@ -85,8 +75,7 @@ exports.GuardarProducto = async (req, res) => {
     precio_producto &&
     marca_producto &&
     idcategorias &&
-    costo &&
-    imagen_producto
+    costo 
   ) {
     const buscarProducto = await Producto.findOne({
       where: {
@@ -104,7 +93,6 @@ exports.GuardarProducto = async (req, res) => {
         marca_producto: marca_producto,
         idcategorias: idcategorias,
         costo: costo,
-        imagen_producto: imagen_producto,
       })
         .then((data) => {
           msj("Datos procesados correctamente", 200, data, res);
