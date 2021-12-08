@@ -28,7 +28,7 @@ CREATE TABLE `categorias` (
   `idcategorias` int NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(45) NOT NULL,
   PRIMARY KEY (`idcategorias`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `categorias` (
 
 LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-INSERT INTO `categorias` VALUES (1,'Camisas'),(2,'Joggers'),(3,'Sneakers'),(4,'Accesorios');
+INSERT INTO `categorias` VALUES (6,'Camisas'),(7,'Joggers'),(8,'Sneakers'),(9,'Accesorios');
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,13 +54,18 @@ CREATE TABLE `detalles_factura` (
   `subtotal` double NOT NULL,
   `impuesto` double NOT NULL,
   `total` double NOT NULL,
-  `idfacturas` int NOT NULL,
+  `idfacturas` int DEFAULT NULL,
   `idproductos` int NOT NULL,
+  `nombre_producto` varchar(45) NOT NULL,
+  `idusuario` int NOT NULL,
+  `nombre_usuario` varchar(45) NOT NULL,
   PRIMARY KEY (`iddetalles_Factura`),
   KEY `fk_Detalles_Factura_Facturas1_idx` (`idfacturas`),
   KEY `fk_Detalles_Factura_Productos1_idx` (`idproductos`),
+  KEY `fk_detalles_factura_usuarios1_idx` (`idusuario`),
   CONSTRAINT `fk_Detalles_Factura_Facturas1` FOREIGN KEY (`idfacturas`) REFERENCES `facturas` (`idfacturas`),
-  CONSTRAINT `fk_Detalles_Factura_Productos1` FOREIGN KEY (`idproductos`) REFERENCES `productos` (`idproductos`)
+  CONSTRAINT `fk_Detalles_Factura_Productos1` FOREIGN KEY (`idproductos`) REFERENCES `productos` (`idproductos`),
+  CONSTRAINT `fk_detalles_factura_usuarios1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,7 +94,7 @@ CREATE TABLE `empleados` (
   `contrasena_encriptada` varchar(255) DEFAULT NULL,
   `direccion_usuario` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`idempleado`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +103,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` VALUES (1,'Bryan Samuel Martinez Zelaya','BryanRoot123','bryanmartz972@gmail.com','87321951','$2b$10$x7BGDU86DiWTKZZXQ19kyuhBkqxX.7OViS8d2PB0zgLkpTFJ8IQJ6','Residencial Centro America Este');
+INSERT INTO `empleados` VALUES (2,'Bryan Samuel Martinez Zelaya','BryanRoot123','bryanmartz972@gmail.com','87321951','$2b$10$N3yRM6I9Q6NE4V5lMGunUemuWb0JgCR4384z5gYdr3Pjc3wbHKDEG','Residencial Centro America Este'),(3,'Lizzi Silva','LizziRoot123','lizzisilva@gmail.com','12345678','$2b$10$EDQ1v1bOINBSfmQboRDyg.v6Bb/8RVRqLfl6d6IbpSjurdKi9PxPi','Ojojona'),(4,'Otoniel Aguirre','OtonielRoot123','otonielaguirre@gmail.com','12345678','$2b$10$rUeffTDpF4t.9kJ7pBxMleoa7ama1iceY4xN0Y/sFGm0upZhEivJu','Residencial Centro America Este');
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,12 +116,12 @@ DROP TABLE IF EXISTS `facturas`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `facturas` (
   `idfacturas` int NOT NULL AUTO_INCREMENT,
-  `fecha_factura` varchar(45) NOT NULL,
+  `fecha_factura` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `idusuario` int NOT NULL,
   PRIMARY KEY (`idfacturas`),
   KEY `fk_Facturas_Usuario1_idx` (`idusuario`),
   CONSTRAINT `fk_Facturas_Usuario1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +152,7 @@ CREATE TABLE `productos` (
   PRIMARY KEY (`idproductos`),
   KEY `fk_Productos_Categorias_idx` (`idcategorias`),
   CONSTRAINT `fk_Productos_Categorias` FOREIGN KEY (`idcategorias`) REFERENCES `categorias` (`idcategorias`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -156,7 +161,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (17,'Prueba6',205,200,'Adidas',1,300,NULL),(18,'Prueba7',200,200,'Adidas',2,300,NULL),(21,'Camisa Amarilla',120,100,'Adidas',2,200,'hola.png'),(23,'Camisa roja',60,100,'Adidas',2,200,'hola.png'),(24,'Prueba1',100,100,'Adidas',2,100,'prueba1.png'),(26,'Tenis1',200,250,'Nike',3,300,'tenis1.png'),(27,'Tenis2',200,255,'Gucci',3,350,'tenis2.png'),(28,'Accesorios1',300,300,'Polo',4,400,'accesorios1.png'),(29,'Accesorios2',100,120,'Nike',4,500,'accesorios2.png'),(30,'Camisa2',150,300,'Polo',1,250,'camisa2.png');
+INSERT INTO `productos` VALUES (42,'Camisa deportiva roja',150,300,'Adidas',6,400,NULL),(43,'Camisa manga larga negra',125,400,'Nike',6,500,NULL),(44,'Camisa deportiva azul',165,300,'Adidas',6,400,NULL),(45,'Camison blanco',180,450,'New Balance',6,550,NULL),(46,'Camison negro',190,450,'New Balance',6,550,NULL),(47,'Joggers slim negros',250,300,'Adidas',7,400,NULL),(48,'Joggers slim crema',250,300,'Adidas',7,400,NULL),(49,'Joggers sueltos rojos',300,325,'Nike',7,450,NULL),(50,'Joggers sueltos azules',275,300,'Nike',7,450,NULL),(51,'Joggers rayados',250,575,'Gucci',7,750,NULL),(52,'Yeezy Boost V2 Oreo',50,2000,'Adidas',8,2500,NULL),(53,'Jordan Point Lane ',30,2200,'Nike',8,3000,NULL),(54,'Air Force 1',100,1750,'Nike',8,2200,NULL),(55,'Fresh Foam Roav',150,1300,'New Balance',8,1900,NULL),(56,'DynaSoft Beaya',150,1400,'New Balance',8,1900,NULL),(57,'Gorra negra',300,250,'Adidas',9,350,NULL),(58,'Gorra roja',300,250,'Nike',9,350,NULL),(59,'Galaxy Fit e',20,1500,'Samsung',9,2000,NULL),(60,'Mi Band 5',20,1000,'Xiaomi',9,1500,NULL),(61,'Gorra azul',250,250,'Nike',9,350,NULL);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -177,7 +182,7 @@ CREATE TABLE `tarjetas` (
   PRIMARY KEY (`idtarjetas`),
   KEY `fk_tarjetas_Usuario1_idx` (`idusuario`),
   CONSTRAINT `fk_tarjetas_Usuario1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +191,6 @@ CREATE TABLE `tarjetas` (
 
 LOCK TABLES `tarjetas` WRITE;
 /*!40000 ALTER TABLE `tarjetas` DISABLE KEYS */;
-INSERT INTO `tarjetas` VALUES (1,'1234567891234567','2021-01-01','256','BAC',3),(2,'1234123412341234','2023-11-30','972','BAC',3),(3,'1231231231231234','2022-02-16','218','Ficohsa',18);
 /*!40000 ALTER TABLE `tarjetas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +210,7 @@ CREATE TABLE `usuarios` (
   `contrasena_encriptada` varchar(255) NOT NULL,
   `direccion_usuario` varchar(255) NOT NULL,
   PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -215,7 +219,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (3,'Bryan Samuel Martinez Zelaya','Bryan972','bryanmartz972@gmail.com','87321951','$2b$10$HpPUdLROqjsNpb2u1OBuQ.RWMveG5rvyV62heWUGsOn0zoiDSIWx.','Residencial Centro America Este'),(18,'Samuel Zelaya','Samuel123','bryanmartz972@gmail.com','87321951','$2b$10$WTsm1wiC5180qdlpu/tKTeQ8sgZBXv8XgZEGr4VOs1h0RPreq.Gry','Cerca de mi casa');
+INSERT INTO `usuarios` VALUES (19,'Bryan Martinez','Bryan123','bryanmartz972@gmail.com','87321951','$2b$10$zS.rfxv3z4xBf3D5AZxTte6Dah8RFTep8G6OokI6Mn0jtL3JnvACW','Residencial Centroamerica Oeste'),(23,'Lizzi Silva','Lizzi123','lizzisilva@gmail.com','12345678','$2b$10$9UiSV0x8C4/3x0NQVW/oxeZ2Yq7m1wqQp4GLJxTwbZuYVZrAksvbe','Ojojona'),(24,'Otoniel Aguirre','Otoniel123','otonielaguirre@gmail.com','12345678','$2b$10$KHbYifyKf0yBQlf3tmRP5uG05vhZfO5RvRKbeoC00JUziozLvNE2q','Residencial Centroamerica Este');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -228,4 +232,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-03  1:04:19
+-- Dump completed on 2021-12-06 22:48:18
