@@ -1,31 +1,33 @@
 
-# Prometheus Mobile App API
-This is an API elaborated for the class of Mobile Programming 2. This is the first API that I made and introduct me into this area. This project was made by a team of 3 people led by me.
-This API was elaborated for a fictional store that sells workout and exercising clothing called Prometheus.
+# API Promteheus
+Esta es una API elaborada para la clase de Programación Móvil 2. Esta es la primera API que realicé y me introdujo a este mundo nuevo. Este proyecto fue hecho por un equipo de tres personas lideradas por mí. 
+Esta API fue elaborada para una tienda ficticia que vende ropa deportiva llamada Prometheus.
 
-## Description of the project
-This project was elaborated with Javascript, Node.js and Express. It also use for storing the clothes and sales of the store with a MySQL database. We use the tool Postman to make calls to the API for testing it.
-
-This API was connected to a React Native application for phones which we also made. We made an app for the client, which he or she can make the purchase, and another app for the employee of the store, which he or she can add new products, restock inventory and delete or modify products on sale. Here are the links for the repositories:
-- React Native client application: https://github.com/Bryanmartz972/ProyectoMovil2ReactUsuario
-- React Native employee application: https://github.com/Bryanmartz972/ProyectoMovil2ReactEmpleado   
+## Descripción del proyecto
+Este proyecto fue elaborado con Javascript, Node.js y Express. Es utilizada para almacenar las prendas deportivas y para guardar las ventas de la tienda en una base de datos de MySQL. Se utilizó la herramienta de Postman para hacer llamadas a la API y testearla. 
 
 
-## Installation
-For trying the project locally on your computer, either clone the repository or download the .zip folder and extract it in any folder you like.
-Once you have the project, with Visual Studio Code terminal or any other Bash program (like Git Bash) run the following commands:
+Esta API es conectada a dos aplicaciones móviles que este mismo equipo realizó con React Native. La primera aplicación es para el cliente, el cual él o ella puede hacer las compras de los productos y la segunda aplicación es para el empleado de la tienda, el cual puede añadir nuevos productos, reabastecer el inventario y eliminar o modificar los productos en venta. Aquí están los enlaces a los otros repositorios:
+- Aplicación móvil del cliente: https://github.com/Bryanmartz972/ProyectoMovil2ReactUsuario
+- Aplicación móvil del empleado: https://github.com/Bryanmartz972/ProyectoMovil2ReactEmpleado   
+
+
+## Instalación
+Para instalar el proyecto en la computadora, clonar el repositorio o descargar la carpeta .zip y extraerla en cualquier otra carpeta.
+Una vez se tiene el proyecto, en la terminal de Visual Studio Code o en otra terminal correr los siguientes comandos:
 
 ```bash
-  npm i //For installing dependencies
-  npm run dev //For running the project. It will open on port 3001
+  npm i // Para instalar las dependencias
+  npm run dev // Para correr el proyecto. Se abrirá en el puerto 3001
 
 ```
-Also for trying out the project you need to import the "proyectomovil2.sql" file located in the root directory of the project to MySQL Workbench. Also changing in the src/configs/db.js the lines for the connection with the database. 
 
-With that all done, you are ready to go. 
+También para probar el proyecto se tiene que importar el archivo "proyectomovil2.sql" localizado en la carpeta raíz del proyecto a MySQL Workbench. Adicionalmente, se tiene que cambiar en el archivo src/configs/db.js las líneas de conexión a la base de datos. 
+
+Con todo esto realizado, se puede utilizar la API
     
-## Authors
-Here are the Github profile of the members of the team (including me) that made this API come to life:
+## Autores
+Aquí están los perfiles de GitHub de los miembros del equipo (incluyéndome) que hicieron esta API realidad:
 
 - [@Bryanmartz972](https://github.com/Bryanmartz972) 
 - [@Otoniel18a](https://github.com/Otoniel18a)
